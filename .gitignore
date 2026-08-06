@@ -1,0 +1,44 @@
+# --- Visual Studio / MSBuild ---
+.vs/
+*.user
+*.suo
+*.sdf
+*.opensdf
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Bb]in/
+[Oo]bj/
+*.ilk
+*.pdb
+*.idb
+*.tlog
+*.log
+ipch/
+
+# --- vcpkg (manifest mode local install, not the vcpkg tool itself) ---
+vcpkg_installed/
+
+# --- .NET / WPF ---
+*.dll
+*.exe
+!icons/**
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# --- Project-specific: third-party code we deliberately don't vendor ---
+# Two GPL-3.0 mods fetched at build time (scripts/fetch-third-party-mods.ps1)
+src/mods/taskbar-grouping/taskbar-grouping.wh.cpp
+src/mods/taskbar-thumbnail-reorder/taskbar-thumbnail-reorder.wh.cpp
+
+# Windhawk SDK headers, copied manually from a local portable install
+# (see src/mods/third_party/README.md) - same "don't vendor" policy
+src/mods/third_party/mods_api.h
+src/mods/third_party/mods_api_internal.h
+src/mods/third_party/windhawk_utils.h
+
+# Local app runtime data if ever generated during dev/testing
+**/app-settings.json
+**/engine.log

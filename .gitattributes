@@ -1,0 +1,39 @@
+# Auto detect text files and normalize line endings to LF in the repo,
+# checked out as CRLF on Windows (git's default core.autocrlf=true behavior,
+# made explicit here so it doesn't depend on each contributor's local config).
+* text=auto
+
+# Sources that should always be LF in the repo, CRLF on checkout (Windows
+# tooling - MSVC, Visual Studio, PowerShell - all handle CRLF natively and
+# this avoids mixed-EOL diffs between contributors on different platforms).
+*.cpp   text
+*.h     text
+*.hpp   text
+*.cs    text
+*.xaml  text
+*.def   text
+*.md    text
+*.json  text
+*.yml   text
+*.yaml  text
+
+# Windows-specific scripts - force CRLF explicitly (some tools, notably
+# older cmd.exe parsers, are picky about line endings in .bat files).
+*.bat   text eol=crlf
+*.ps1   text eol=crlf
+
+# Solution/project files - Visual Studio writes these with CRLF; keep as-is
+# to avoid noisy diffs when VS re-saves them.
+*.sln   text eol=crlf
+*.vcxproj       text eol=crlf
+*.vcxproj.filters  text eol=crlf
+*.csproj        text eol=crlf
+
+# Binary files - never touch line endings, avoid accidental corruption.
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.ico   binary
+*.dll   binary
+*.exe   binary
+*.pdb   binary

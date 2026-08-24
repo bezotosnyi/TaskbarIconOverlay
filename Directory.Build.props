@@ -1,0 +1,12 @@
+<Project>
+  <PropertyGroup>
+    <!-- Centralized clean locations -->
+    <OutDir>$(SolutionDir)artifacts\bin\$(Platform)\$(Configuration)\</OutDir>
+    <OutputPath>$(SolutionDir)artifacts\bin\$(Platform)\$(Configuration)\</OutputPath>
+    <IntDir>$(SolutionDir)artifacts\obj\$(MSBuildProjectName)\$(Platform)\$(Configuration)\</IntDir>
+
+    <!-- Disables the automatic framework/runtime folder suffixes for WPF -->
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+  </PropertyGroup>
+</Project>

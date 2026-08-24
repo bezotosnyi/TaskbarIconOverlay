@@ -1,49 +1,47 @@
 <Solution>
   <Configurations>
-    <Platform Name="Any CPU" />
     <Platform Name="x64" />
-    <Platform Name="x86" />
   </Configurations>
   <Folder Name="/app/">
-    <Project Path="src/app/TaskbarIconOverlay.App.csproj" DefaultStartup="true">
-      <Platform Solution="*|x64" Project="x64" />
-      <Build Solution="*|Any CPU" Project="false" />
-      <Build Solution="*|x86" Project="false" />
+    <Project Path="src/app/TaskbarIconOverlay.App.csproj">
+      <BuildDependency Project="src/engine/TaskbarIconOverlay.Engine.vcxproj" />
+      <BuildDependency Project="src/injector/TaskbarIconOverlay.Injector.vcxproj" />
+      <BuildDependency Project="src/mods/taskbar-grouping/TaskbarIconOverlay.Mods.TaskbarGrouping.vcxproj" />
+      <BuildDependency Project="src/mods/taskbar-icon-overlay/TaskbarIconOverlay.Mods.TaskbarIconOverlay.vcxproj" />
+      <BuildDependency Project="src/shared/logger/TaskbarIconOverlay.Logger.vcxproj" />
+      <BuildDependency Project="src/shared/symbols/TaskbarIconOverlay.DiaSymbolResolver.vcxproj" />
+      <BuildDependency Project="src/wrapper/TaskbarIconOverlay.WindhawkWrapper.vcxproj" />
+      <Platform Project="x64" />
     </Project>
   </Folder>
   <Folder Name="/engine/">
     <Project Path="src/engine/TaskbarIconOverlay.Engine.vcxproj" Id="a0f47706-645a-4e64-a271-91f391c0e057">
-      <Build Solution="*|x86" Project="false" />
+      <BuildDependency Project="src/mods/taskbar-grouping/TaskbarIconOverlay.Mods.TaskbarGrouping.vcxproj" />
+      <BuildDependency Project="src/mods/taskbar-icon-overlay/TaskbarIconOverlay.Mods.TaskbarIconOverlay.vcxproj" />
     </Project>
   </Folder>
   <Folder Name="/injector/">
     <Project Path="src/injector/TaskbarIconOverlay.Injector.vcxproj" Id="ab60b71c-8be0-4cbb-835a-02e8e9294895">
-      <Build Solution="*|x86" Project="false" />
+      <BuildDependency Project="src/engine/TaskbarIconOverlay.Engine.vcxproj" />
     </Project>
   </Folder>
   <Folder Name="/mods/">
     <Project Path="src/mods/shared/TaskbarIconOverlay.Mods.Shared.vcxitems" Id="9de4e9dd-931e-48d7-8b82-5b89627b1b54" />
     <Project Path="src/mods/taskbar-grouping/TaskbarIconOverlay.Mods.TaskbarGrouping.vcxproj" Id="8521689e-d95d-442b-9501-6a359defee4b">
-      <Build Solution="*|x86" Project="false" />
+      <BuildDependency Project="src/shared/symbols/TaskbarIconOverlay.DiaSymbolResolver.vcxproj" />
     </Project>
     <Project Path="src/mods/taskbar-icon-overlay/TaskbarIconOverlay.Mods.TaskbarIconOverlay.vcxproj" Id="939fc9f2-905d-4abb-adda-f143eef26e16">
-      <Build Solution="*|x86" Project="false" />
+      <BuildDependency Project="src/shared/symbols/TaskbarIconOverlay.DiaSymbolResolver.vcxproj" />
     </Project>
   </Folder>
   <Folder Name="/shared/" />
   <Folder Name="/shared/logger/">
-    <Project Path="src/shared/logger/TaskbarIconOverlay.Logger.vcxproj" Id="3918c1f3-8f4c-4d20-a1bb-2671ebb7139d">
-      <Build Solution="*|x86" Project="false" />
-    </Project>
+    <Project Path="src/shared/logger/TaskbarIconOverlay.Logger.vcxproj" Id="3918c1f3-8f4c-4d20-a1bb-2671ebb7139d" />
   </Folder>
   <Folder Name="/shared/symbols/">
-    <Project Path="src/shared/symbols/TaskbarIconOverlay.DiaSymbolResolver.vcxproj" Id="82a48ae6-9e01-40c9-9333-03e6701dd265">
-      <Build Solution="*|x86" Project="false" />
-    </Project>
+    <Project Path="src/shared/symbols/TaskbarIconOverlay.DiaSymbolResolver.vcxproj" Id="82a48ae6-9e01-40c9-9333-03e6701dd265" />
   </Folder>
   <Folder Name="/wrapper/">
-    <Project Path="src/wrapper/TaskbarIconOverlay.WindhawkWrapper.vcxproj" Id="b8944b45-a93a-4437-82e3-593fcb63a141">
-      <Build Solution="*|x86" Project="false" />
-    </Project>
+    <Project Path="src/wrapper/TaskbarIconOverlay.WindhawkWrapper.vcxproj" Id="b8944b45-a93a-4437-82e3-593fcb63a141" />
   </Folder>
 </Solution>

@@ -5,18 +5,7 @@
     <TargetFramework>net10.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
     <UseWindowsForms>true</UseWindowsForms>
-    <Platforms>x64;AnyCPU</Platforms>
-  </PropertyGroup>
-
-  <PropertyGroup>
-    <!-- Disables the automatic framework folder suffix (e.g., /net10.0-windows/) -->
-    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-
-    <!-- Disables the automatic runtime identifier folder suffix -->
-    <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
-
-    <!-- Sets the output directory to match your C++ structure -->
-    <OutputPath>$(SolutionDir)$(Platform)\$(Configuration)\</OutputPath>
+    <Platforms>x64</Platforms>
   </PropertyGroup>
 
   <ItemGroup>

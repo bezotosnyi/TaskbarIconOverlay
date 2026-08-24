@@ -93,7 +93,6 @@ reproducibility:
 
 ```
 https://raw.githubusercontent.com/ramensoftware/windhawk-mods/<pinned-commit>/mods/taskbar-grouping.wh.cpp
-https://raw.githubusercontent.com/ramensoftware/windhawk-mods/<pinned-commit>/mods/taskbar-thumbnail-reorder.wh.cpp
 ```
 
 See `scripts/fetch-third-party-mods.ps1` for the exact pinned commit and

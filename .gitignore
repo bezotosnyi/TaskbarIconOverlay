@@ -30,7 +30,7 @@ artifacts/
 
 # --- Project-specific: third-party code we deliberately don't vendor ---
 # GPL-3.0 mods fetched at build time (scripts/fetch-third-party-mods.ps1)
-#src/mods/taskbar-grouping/taskbar-grouping.wh.cpp
+src/mods/taskbar-grouping/taskbar-grouping.wh.cpp
 
 # Local app runtime data if ever generated during dev/testing
 **/app-settings.json

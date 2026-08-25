@@ -46,7 +46,7 @@ public sealed class MainViewModel : ViewModelBase
 
         // Default preset: 1 window, no image yet.
         Slots.Add(new IconSlotViewModel());
-        RenumberSlots();
+        Apply();
 
         AddSlotCommand = new RelayCommand(_ => AddSlot());
         RemoveSlotCommand = new RelayCommand(param => RemoveSlot(param as IconSlotViewModel));

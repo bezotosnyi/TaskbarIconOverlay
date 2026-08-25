@@ -56,9 +56,6 @@ The following settings can be configured through mod settings:
 - numberSize: 12
   $name: Number font size
   $description: Size of the overlay numbers (8-16)
-- iconsPath: "C:\\Program Files\\Windhawk\\icons"
-  $name: Icons path
-  $description: Path to icons
 - numberColor: "#FFFFFF"
   $name: Number color
   $description: Text color for the numbers (hex format "#RRGGBB" or "##AARRGGBB")
@@ -104,6 +101,44 @@ using namespace winrt::Windows::UI::Xaml::Media::Imaging;
 using namespace winrt::Windows::UI::Core;
 
 using Uri = winrt::Windows::Foundation::Uri;
+
+// Own copy of the IPC contract, matching
+// TaskbarIconOverlay.App/Services/SharedConfigWriter.cs BYTE-FOR-BYTE.
+// If you change field order/size on either side, update both.
+namespace SharedConfig
+{
+    constexpr uint32_t kMaxIconSlots = 50;
+    constexpr uint32_t kMaxPathChars = 260; // MAX_PATH
+
+    constexpr wchar_t kMemName[] = L"Local\\TaskbarIconOverlay_Config";
+    constexpr wchar_t kEnabledEventName[] = L"Local\\TaskbarIconOverlay_Enabled";
+    constexpr wchar_t kConfigChangedEventName[] = L"Local\\TaskbarIconOverlay_ConfigChanged";
+
+    enum class NumberPosition : uint32_t
+    {
+        TopLeft = 0,
+        TopRight = 1,
+        BottomLeft = 2,
+        BottomRight = 3,
+    };
+
+#pragma pack(push, 1)
+    struct Layout
+    {
+        uint32_t version;
+        uint32_t windowCount;
+        wchar_t iconPaths[kMaxIconSlots][kMaxPathChars];
+        uint32_t stickyIconBinding; // bool as uint32
+        uint32_t numberedCount;
+        uint32_t allowNumbersBeyondTen; // bool as uint32
+        NumberPosition numberPosition;
+        uint32_t numberSize;
+        uint32_t numberColorArgb;
+        uint32_t backgroundColorArgb;
+        uint32_t showOnAllTaskbars; // bool as uint32
+    };
+#pragma pack(pop)
+} // namespace SharedConfig
 
 using LoadLibraryExW_t = decltype(&LoadLibraryExW);
 LoadLibraryExW_t LoadLibraryExW_Original;
@@ -165,7 +200,6 @@ struct {
     std::wstring numberColor;
     std::wstring backgroundColor;
     bool showOnAllTaskbars;
-    std::wstring iconsPath;
 } g_settings;
 
 struct CustomOverlay {
@@ -257,6 +291,16 @@ std::mutex g_overlayMutex;
 std::vector<RootEntry> g_trackedRoots;
 
 std::unordered_map<int, IconResource> g_iconResourceMap;
+std::mutex g_mapMutex;
+
+HANDLE g_hMapping = nullptr;
+SharedConfig::Layout* g_config = nullptr;
+HANDLE g_hEnabledEvent = nullptr;
+HANDLE g_hConfigChangedEvent = nullptr;
+HANDLE g_hWatcherThread = nullptr;
+volatile bool g_watcherShouldStop = false;
+
+DWORD WINAPI ConfigWatcherThreadProc(LPVOID);
 
 // Helper function to find button in vector
 auto FindButtonInVector = [](const std::vector<ButtonInformation>& buttons, const FrameworkElement& targetButton) {
@@ -396,13 +440,14 @@ void SetNumberPosition(Grid& textContainer) {
 }
 
 FrameworkElement CreateNumberContainer(int number) {
-    if (number < 1 || number > 10) {
+    if ((g_config->allowNumbersBeyondTen && number >g_config->numberedCount) ||
+        number < 1 || number > g_config->numberedCount) {
         Wh_Log(L"CreateNumberContainer: Invalid number %d, skipping creation", number);
         return nullptr;
     }
 
     try {
-        std::wstring text = (number == 10) ? L"0" : std::to_wstring(number);
+        std::wstring text = (!g_config->allowNumbersBeyondTen && number == 10) ? L"0" : std::to_wstring(number);
         auto textColor = ParseHexColor(g_settings.numberColor);
         auto strokeColor = ParseHexColor(g_settings.backgroundColor);
 
@@ -439,13 +484,19 @@ FrameworkElement CreateNumberContainer(int number) {
 }
 
 FrameworkElement CreateIconContainer(int number) {
-    if (number < 1 || number > 10) {
+    if (number < 1 || number > g_config->windowCount) {
         Wh_Log(L"CreateIconContainer: Invalid number %d, skipping creation", number);
         return nullptr;
     }
 
+    std::lock_guard<std::mutex> lock(g_mapMutex);
     try {
         Grid iconContainer;
+
+        if (!g_iconResourceMap.contains(number)) {
+            Wh_Log("CreateIconContainer: No icon resource found for number %d", number);
+            return nullptr;
+        }
 
         auto& iconResource = g_iconResourceMap.at(number);
         BitmapImage bitmap = iconResource.GetImage();
@@ -472,14 +523,14 @@ FrameworkElement CreateIconContainer(int number) {
 }
 
 CustomOverlay CreateCustomOverlay(int number, CustomOverlay oldOverlay) {
-    if (number < 1 || number > 10) {
+    if (number < 1 || number > g_config->windowCount) {
         Wh_Log(L"CreateCustomOverlay: Invalid number %d, skipping creation", number);
         return { nullptr, nullptr };
     }
 
     try {
         auto iconContainer =
-            oldOverlay.iconContainer ? oldOverlay.iconContainer : CreateIconContainer(number);
+            oldOverlay.iconContainer && g_config->stickyIconBinding ? oldOverlay.iconContainer : CreateIconContainer(number);
 
         Wh_Log(L"CreateCustomOverlay: Created overlay with number %d", number);
 
@@ -593,17 +644,8 @@ void RemoveExistingOverlays(FrameworkElement iconPanel) {
 }
 
 bool IsEnabledByController() {
-    return TRUE;
-    HANDLE hEvent = OpenEvent(SYNCHRONIZE, FALSE, L"Local\\WindhawkMod_PwTaskbarNumberer_Active");
-
-    if (hEvent != NULL) {
-        DWORD result = WaitForSingleObject(hEvent, 0);
-        CloseHandle(hEvent);
-
-        return (result == WAIT_OBJECT_0);
-    }
-
-    return false;
+    if (!g_hEnabledEvent) return false;
+    return WaitForSingleObject(g_hEnabledEvent, 0) == WAIT_OBJECT_0;
 }
 
 void UpdateButtonOverlay(FrameworkElement button, int number) {
@@ -648,12 +690,13 @@ void UpdateButtonOverlay(FrameworkElement button, int number) {
             Wh_Log(L"UpdateButtonOverlay: New button, number %d", number);
         }
 
-        const bool shouldShow = number <= 10;
+        const bool shouldShow = number <= g_config->numberedCount;
         const bool visibilityChanged = buttonInfo.isVisible != shouldShow;
         const bool numberChanged = buttonInfo.currentNumber != number;
         const bool needsNewOverlay = !buttonInfo.overlay.iconContainer ||
             !buttonInfo.overlay.textContainer ||
-            (numberChanged && buttonInfo.overlay.iconContainer && buttonInfo.overlay.textContainer);
+            (numberChanged && buttonInfo.overlay.iconContainer && buttonInfo.overlay.textContainer) ||
+            number == 10 && g_config->allowNumbersBeyondTen;
 
         if (!IsEnabledByController()) {
             Wh_Log(L"UpdateButtonOverlay: Is not enabled");
@@ -953,22 +996,6 @@ HMODULE WINAPI LoadLibraryExW_Hook(LPCWSTR lpLibFileName, HANDLE hFile, DWORD dw
     return module;
 }
 
-void UpdateResourceMap() {
-    g_iconResourceMap.clear();
-    g_iconResourceMap = {
-    { 1,  { g_settings.iconsPath + L"\\var.png" } },
-    { 2,  { g_settings.iconsPath + L"\\kosa.png" } },
-    { 3,  { g_settings.iconsPath + L"\\dru.png" } },
-    { 4,  { g_settings.iconsPath + L"\\sik.png" } },
-    { 5,  { g_settings.iconsPath + L"\\sin.png" } },
-    { 6,  { g_settings.iconsPath + L"\\mist.png" } },
-    { 7,  { g_settings.iconsPath + L"\\tank.png" } },
-    { 8,  { g_settings.iconsPath + L"\\prist.png" } },
-    { 9,  { g_settings.iconsPath + L"\\pal.png" } },
-    { 10, { g_settings.iconsPath + L"\\bard.png" } }
-    };
-}
-
 void LoadSettings() {
     PCWSTR position = Wh_GetStringSetting(L"numberPosition");
     g_settings.numberPosition = NumberPosition::bottomRight;
@@ -991,15 +1018,74 @@ void LoadSettings() {
     Wh_FreeStringSetting(backgroundColor);
 
     g_settings.showOnAllTaskbars = Wh_GetIntSetting(L"showOnAllTaskbars");
+}
 
-    PCWSTR iconsPath = Wh_GetStringSetting(L"iconsPath");
-    g_settings.iconsPath = iconsPath;
-    Wh_FreeStringSetting(iconsPath);
+void LoadExternalSettings() {
+    g_settings.numberPosition = static_cast<NumberPosition>(g_config->numberPosition);
+    g_settings.numberSize = g_config->numberSize;
+    if (g_settings.numberSize < 8) g_settings.numberSize = 8;
+    if (g_settings.numberSize > 16) g_settings.numberSize = 16;
 
-    UpdateResourceMap();
+    g_settings.numberColor = std::format(L"#{:08X}", g_config->numberColorArgb);
+    g_settings.backgroundColor = std::format(L"#{:08X}", g_config->backgroundColorArgb);
+
+    g_settings.showOnAllTaskbars = g_config->showOnAllTaskbars;
+    
+    std::lock_guard<std::mutex> lock(g_mapMutex);
+    g_iconResourceMap.clear();
+    for (auto i = 1; i <= g_config->windowCount; i++) {
+        std::wstring iconPath = g_config->iconPaths[i - 1];
+        if (!iconPath.empty()) {
+            g_iconResourceMap.emplace(i, IconResource(iconPath));
+        }
+    }
+}
+
+bool ConnectToApp() {
+    g_hMapping = OpenFileMappingW(FILE_MAP_READ, FALSE, SharedConfig::kMemName);
+    if (!g_hMapping) {
+        Wh_Log(L"SharedConfig mapping not found - App not running yet?");
+        return false;
+    }
+
+    g_config = reinterpret_cast<SharedConfig::Layout*>(
+        MapViewOfFile(g_hMapping, FILE_MAP_READ, 0, 0, sizeof(SharedConfig::Layout)));
+    if (!g_config) {
+        Wh_Log(L"MapViewOfFile failed");
+        CloseHandle(g_hMapping);
+        g_hMapping = nullptr;
+        return false;
+    }
+
+    g_hEnabledEvent = OpenEventW(SYNCHRONIZE, FALSE, SharedConfig::kEnabledEventName);
+    g_hConfigChangedEvent = OpenEventW(SYNCHRONIZE, FALSE, SharedConfig::kConfigChangedEventName);
+
+    g_watcherShouldStop = false;
+    g_hWatcherThread = CreateThread(nullptr, 0, ConfigWatcherThreadProc, nullptr, 0, nullptr);
+
+    return true;
+}
+
+void DisconnectFromApp() {
+    g_watcherShouldStop = true;
+    if (g_hConfigChangedEvent) SetEvent(g_hConfigChangedEvent);  // wake the watcher immediately
+    if (g_hWatcherThread) {
+        WaitForSingleObject(g_hWatcherThread, 2000);
+        CloseHandle(g_hWatcherThread);
+        g_hWatcherThread = nullptr;
+    }
+
+    if (g_config) UnmapViewOfFile(g_config);
+    if (g_hMapping) CloseHandle(g_hMapping);
+    if (g_hEnabledEvent) CloseHandle(g_hEnabledEvent);
+    if (g_hConfigChangedEvent) CloseHandle(g_hConfigChangedEvent);
+    g_config = nullptr;
+    g_hMapping = g_hEnabledEvent = g_hConfigChangedEvent = nullptr;
 }
 
 BOOL Wh_ModInit() {
+    ConnectToApp();
+
     LoadSettings();
 
     if (!HookTaskbarDllSymbols()) return FALSE;
@@ -1025,6 +1111,7 @@ void Wh_ModAfterInit() {
 }
 
 void Wh_ModBeforeUninit() {
+    DisconnectFromApp();
     g_unloading = true;
     RemoveAllNumberOverlays();
 }
@@ -1035,4 +1122,23 @@ void Wh_ModSettingsChanged() {
     Wh_Log(L"Settings changed, clearing existing overlays");
     LoadSettings();
     RemoveAllNumberOverlays();
+}
+
+void ModSettingsChanged() {
+    Wh_Log(L"External settings changed, clearing existing overlays");
+    LoadExternalSettings();
+    RemoveAllNumberOverlays();
+}
+
+DWORD WINAPI ConfigWatcherThreadProc(LPVOID) {
+    if (!g_hConfigChangedEvent) return 0;
+
+    while (!g_watcherShouldStop) {
+        DWORD result = WaitForSingleObject(g_hConfigChangedEvent, 500);
+        if (g_watcherShouldStop) break;
+        if (result == WAIT_OBJECT_0) {
+            ModSettingsChanged();
+        }
+    }
+    return 0;
 }

@@ -7,7 +7,7 @@
         xmlns:vm="clr-namespace:TaskbarIconOverlay.App.ViewModels"
         xmlns:models="clr-namespace:TaskbarIconOverlay.App.Models"
         xmlns:loc="clr-namespace:TaskbarIconOverlay.App.Localization"
-        Title="TaskbarIconOverlay" Height="640" Width="520"
+        Title="{loc:LocalizationExtensions WindowTitle}" Height="640" Width="520"
         WindowStartupLocation="CenterScreen"
         d:DataContext="{d:DesignInstance Type=vm:MainViewModel, IsDesignTimeCreatable=False}">
 
@@ -107,18 +107,18 @@
             <!-- ================= Numbering tab ================= -->
             <TabItem Header="{loc:LocalizationExtensions TabNumbering}">
                 <StackPanel Margin="12">
-                    <TextBlock Text="Кількість пронумерованих вікон" Margin="0,0,0,4"/>
+                    <TextBlock Text="{loc:LocalizationExtensions NumberedCountLabel}" Margin="0,0,0,4"/>
                     <Slider Minimum="0" Maximum="{Binding AllowNumbersBeyondTen, Converter={StaticResource BoolToMaxNumbered}}"
                             Value="{Binding NumberedCount}" TickFrequency="1" IsSnapToTickEnabled="True"/>
                     <TextBlock Text="{Binding NumberedCount}" HorizontalAlignment="Right" Margin="0,0,0,12"/>
 
-                    <CheckBox Content="Дозволити нумерацію понад 10 (без Win+N)"
+                    <CheckBox Content="{loc:LocalizationExtensions AllowBeyondTen}" 
                               IsChecked="{Binding AllowNumbersBeyondTen}" Margin="0,0,0,12"/>
 
-                    <CheckBox Content="Закріплювати іконку за вікном (не за позицією)"
+                    <CheckBox Content="{loc:LocalizationExtensions StickyBinding}"
                               IsChecked="{Binding StickyIconBinding}" Margin="0,0,0,12"/>
 
-                    <TextBlock Text="Позиція номера" Margin="0,0,0,4"/>
+                    <TextBlock Text="{loc:LocalizationExtensions PositionLabel}" Margin="0,0,0,4"/>
                     <ComboBox SelectedItem="{Binding NumberPosition}" Margin="0,0,0,12">
                         <models:NumberPosition>TopLeft</models:NumberPosition>
                         <models:NumberPosition>TopRight</models:NumberPosition>
@@ -126,11 +126,11 @@
                         <models:NumberPosition>BottomRight</models:NumberPosition>
                     </ComboBox>
 
-                    <TextBlock Text="Розмір шрифту (8-16)" Margin="0,0,0,4"/>
+                    <TextBlock Text="{loc:LocalizationExtensions FontSizeLabel}" Margin="0,0,0,4"/>
                     <Slider Minimum="8" Maximum="16" Value="{Binding NumberSize}"
                             TickFrequency="1" IsSnapToTickEnabled="True" Margin="0,0,0,12"/>
 
-                    <CheckBox Content="Показувати номери на всіх таскбарах"
+                    <CheckBox Content="{loc:LocalizationExtensions ShowOnAllTaskbars}"
                               IsChecked="{Binding ShowOnAllTaskbars}"/>
                 </StackPanel>
             </TabItem>
@@ -138,11 +138,11 @@
             <!-- ================= Appearance tab ================= -->
             <TabItem Header="{loc:LocalizationExtensions TabColors}">
                 <StackPanel Margin="12">
-                    <TextBlock Text="Колір цифр" Margin="0,0,0,4"/>
+                    <TextBlock Text="{loc:LocalizationExtensions NumberColorLabel}" Margin="0,0,0,4"/>
                     <Rectangle Height="24" Fill="{Binding NumberColor, Converter={StaticResource ColorToBrush}}"
                                Stroke="Gray" MouseDown="NumberColorSwatch_MouseDown" Margin="0,0,0,12"/>
 
-                    <TextBlock Text="Колір обводки/фону" Margin="0,0,0,4"/>
+                    <TextBlock Text="{loc:LocalizationExtensions BackgroundColorLabel}" Margin="0,0,0,4"/>
                     <Rectangle Height="24" Fill="{Binding BackgroundColor, Converter={StaticResource ColorToBrush}}"
                                Stroke="Gray" MouseDown="BackgroundColorSwatch_MouseDown"/>
                 </StackPanel>

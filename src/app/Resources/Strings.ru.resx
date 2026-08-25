@@ -99,21 +99,50 @@
 		<value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
 	</resheader>
 
+	<data name="WindowTitle" xml:space="preserve"><value>TaskbarIconOverlay - оверлеи иконок панели задач</value></data>
+
 	<data name="ToggleEnable" xml:space="preserve"><value>Включить</value></data>
 	<data name="ToggleDisable" xml:space="preserve"><value>Выключить</value></data>
+	<data name="ToggleWorking" xml:space="preserve"><value>Выполняется...</value></data>
+
 	<data name="TabSlots" xml:space="preserve"><value>Окна и иконки</value></data>
 	<data name="TabNumbering" xml:space="preserve"><value>Нумерация</value></data>
 	<data name="TabColors" xml:space="preserve"><value>Цвета</value></data>
+
 	<data name="AddSlot" xml:space="preserve"><value>+ Добавить слот</value></data>
 	<data name="BrowseIcon" xml:space="preserve"><value>Выбрать...</value></data>
 	<data name="RemoveSlot" xml:space="preserve"><value>Удалить</value></data>
+
 	<data name="NumberedCountLabel" xml:space="preserve"><value>Количество пронумерованных окон</value></data>
 	<data name="AllowBeyondTen" xml:space="preserve"><value>Разрешить нумерацию свыше 10 (без Win+N)</value></data>
-	<data name="StickyBinding" xml:space="preserve"><value>Закреплять иконку за окном (не за позицией)</value></data>
+	<data name="StickyBinding" xml:space="preserve"><value>Закреплять иконку за окном</value></data>
+	<data name="StickyBindingHint" xml:space="preserve"><value>Если включено, иконка остаётся за тем же окном, даже если оно перемещается на другую позицию в панели задач. Если выключено — иконки следуют за позицией, а не за окном.</value></data>
 	<data name="PositionLabel" xml:space="preserve"><value>Позиция номера</value></data>
-	<data name="FontSizeLabel" xml:space="preserve"><value>Размер шрифта (8-16)</value></data>
+	<data name="FontSizeLabel" xml:space="preserve"><value>Размер шрифта</value></data>
 	<data name="ShowOnAllTaskbars" xml:space="preserve"><value>Показывать номера на всех панелях задач</value></data>
+
 	<data name="NumberColorLabel" xml:space="preserve"><value>Цвет цифр</value></data>
 	<data name="BackgroundColorLabel" xml:space="preserve"><value>Цвет обводки/фона</value></data>
+
+	<data name="PositionTopLeft" xml:space="preserve"><value>Верхний левый угол иконки</value></data>
+	<data name="PositionTopRight" xml:space="preserve"><value>Верхний правый угол иконки</value></data>
+	<data name="PositionBottomLeft" xml:space="preserve"><value>Нижний левый угол иконки</value></data>
+	<data name="PositionBottomRight" xml:space="preserve"><value>Нижний правый угол иконки</value></data>
+
+	<data name="MenuFile" xml:space="preserve"><value>_Файл</value></data>
+	<data name="MenuExit" xml:space="preserve"><value>Выход</value></data>
+	<data name="MenuView" xml:space="preserve"><value>_Вид</value></data>
+	<data name="MenuLanguage" xml:space="preserve"><value>Язык</value></data>
+	<data name="MenuTheme" xml:space="preserve"><value>Тема</value></data>
+	<data name="MenuThemeLight" xml:space="preserve"><value>Светлая</value></data>
+	<data name="MenuThemeDark" xml:space="preserve"><value>Тёмная</value></data>
+
+	<data name="LangEnglish" xml:space="preserve"><value>English</value></data>
+	<data name="LangUkrainian" xml:space="preserve"><value>Українська</value></data>
+	<data name="LangRussian" xml:space="preserve"><value>Русский</value></data>
+
+	<data name="TrayShow" xml:space="preserve"><value>Показать</value></data>
+	<data name="TrayExit" xml:space="preserve"><value>Выйти</value></data>
+	<data name="TrayTooltip" xml:space="preserve"><value>TaskbarIconOverlay</value></data>
 
 </root>

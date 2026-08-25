@@ -99,21 +99,50 @@
 		<value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
 	</resheader>
 
-	<data name="ToggleEnable" xml:space="preserve"><value>Enable</value></data>
-	<data name="ToggleDisable" xml:space="preserve"><value>Disable</value></data>
-	<data name="TabSlots" xml:space="preserve"><value>Windows &amp; icons</value></data>
-	<data name="TabNumbering" xml:space="preserve"><value>Numbering</value></data>
-	<data name="TabColors" xml:space="preserve"><value>Colors</value></data>
-	<data name="AddSlot" xml:space="preserve"><value>+ Add slot</value></data>
-	<data name="BrowseIcon" xml:space="preserve"><value>Browse...</value></data>
-	<data name="RemoveSlot" xml:space="preserve"><value>Remove</value></data>
-	<data name="NumberedCountLabel" xml:space="preserve"><value>Number of numbered windows</value></data>
-	<data name="AllowBeyondTen" xml:space="preserve"><value>Allow numbering beyond 10 (no Win+N)</value></data>
-	<data name="StickyBinding" xml:space="preserve"><value>Pin icon to window (not to position)</value></data>
-	<data name="PositionLabel" xml:space="preserve"><value>Number position</value></data>
-	<data name="FontSizeLabel" xml:space="preserve"><value>Font size (8-16)</value></data>
-	<data name="ShowOnAllTaskbars" xml:space="preserve"><value>Show numbers on all taskbars</value></data>
-	<data name="NumberColorLabel" xml:space="preserve"><value>Number color</value></data>
-	<data name="BackgroundColorLabel" xml:space="preserve"><value>Outline/background color</value></data>
+	<data name="WindowTitle" xml:space="preserve"><value>TaskbarIconOverlay - оверлеї іконок таскбару</value></data>
+
+	<data name="ToggleEnable" xml:space="preserve"><value>Увімкнути</value></data>
+	<data name="ToggleDisable" xml:space="preserve"><value>Вимкнути</value></data>
+	<data name="ToggleWorking" xml:space="preserve"><value>Виконується...</value></data>
+
+	<data name="TabSlots" xml:space="preserve"><value>Вікна та іконки</value></data>
+	<data name="TabNumbering" xml:space="preserve"><value>Нумерація</value></data>
+	<data name="TabColors" xml:space="preserve"><value>Кольори</value></data>
+
+	<data name="AddSlot" xml:space="preserve"><value>+ Додати слот</value></data>
+	<data name="BrowseIcon" xml:space="preserve"><value>Обрати...</value></data>
+	<data name="RemoveSlot" xml:space="preserve"><value>Видалити</value></data>
+
+	<data name="NumberedCountLabel" xml:space="preserve"><value>Кількість пронумерованих вікон</value></data>
+	<data name="AllowBeyondTen" xml:space="preserve"><value>Дозволити нумерацію понад 10 (без Win+N)</value></data>
+	<data name="StickyBinding" xml:space="preserve"><value>Закріплювати іконку за вікном</value></data>
+	<data name="StickyBindingHint" xml:space="preserve"><value>Якщо увімкнено, іконка лишається за тим самим вікном, навіть якщо воно переміщується на іншу позицію в таскбарі. Якщо вимкнено — іконки слідують за позицією, а не за вікном.</value></data>
+	<data name="PositionLabel" xml:space="preserve"><value>Позиція номера</value></data>
+	<data name="FontSizeLabel" xml:space="preserve"><value>Розмір шрифту</value></data>
+	<data name="ShowOnAllTaskbars" xml:space="preserve"><value>Показувати номери на всіх таскбарах</value></data>
+
+	<data name="NumberColorLabel" xml:space="preserve"><value>Колір цифр</value></data>
+	<data name="BackgroundColorLabel" xml:space="preserve"><value>Колір обводки/фону</value></data>
+
+	<data name="PositionTopLeft" xml:space="preserve"><value>Верхній лівий кут іконки</value></data>
+	<data name="PositionTopRight" xml:space="preserve"><value>Верхній правий кут іконки</value></data>
+	<data name="PositionBottomLeft" xml:space="preserve"><value>Нижній лівий кут іконки</value></data>
+	<data name="PositionBottomRight" xml:space="preserve"><value>Нижній правий кут іконки</value></data>
+
+	<data name="MenuFile" xml:space="preserve"><value>_Файл</value></data>
+	<data name="MenuExit" xml:space="preserve"><value>Вихід</value></data>
+	<data name="MenuView" xml:space="preserve"><value>_Вигляд</value></data>
+	<data name="MenuLanguage" xml:space="preserve"><value>Мова</value></data>
+	<data name="MenuTheme" xml:space="preserve"><value>Тема</value></data>
+	<data name="MenuThemeLight" xml:space="preserve"><value>Світла</value></data>
+	<data name="MenuThemeDark" xml:space="preserve"><value>Темна</value></data>
+
+	<data name="LangEnglish" xml:space="preserve"><value>English</value></data>
+	<data name="LangUkrainian" xml:space="preserve"><value>Українська</value></data>
+	<data name="LangRussian" xml:space="preserve"><value>Русский</value></data>
+
+	<data name="TrayShow" xml:space="preserve"><value>Показати</value></data>
+	<data name="TrayExit" xml:space="preserve"><value>Вийти</value></data>
+	<data name="TrayTooltip" xml:space="preserve"><value>TaskbarIconOverlay</value></data>
 
 </root>

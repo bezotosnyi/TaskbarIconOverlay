@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Windows.Markup;
 
-using static TaskbarIconOverlay.App.Resources.Resources;
+using static TaskbarIconOverlay.App.Resources.Strings;
 
 namespace TaskbarIconOverlay.App.Localization;
 
 /// <summary>
 /// Usage: Content="{loc:Loc ToggleEnable}" - resolves via
-/// Resources.resx/Resources.uk.resx/Resources.ru.resx based on
+/// Strings.resx/Strings.uk.resx/Strings.ru.resx based on
 /// Thread.CurrentThread.CurrentUICulture at the moment the binding is
 /// evaluated. Set CurrentUICulture once at startup (App.xaml.cs, before
 /// any window is constructed) to switch language app-wide.

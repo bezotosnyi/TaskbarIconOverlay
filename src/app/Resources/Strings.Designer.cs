@@ -22,14 +22,14 @@ namespace TaskbarIconOverlay.App.Resources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resources {
+    internal class Strings {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal Resources() {
+        internal Strings() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace TaskbarIconOverlay.App.Resources {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("TaskbarIconOverlay.App.Resources.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("TaskbarIconOverlay.App.Resources.Strings", typeof(Strings).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -97,11 +97,101 @@ namespace TaskbarIconOverlay.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Font size (8-16).
+        ///   Looks up a localized string similar to Font size.
         /// </summary>
         internal static string FontSizeLabel {
             get {
                 return ResourceManager.GetString("FontSizeLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to English.
+        /// </summary>
+        internal static string LangEnglish {
+            get {
+                return ResourceManager.GetString("LangEnglish", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Русский.
+        /// </summary>
+        internal static string LangRussian {
+            get {
+                return ResourceManager.GetString("LangRussian", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Українська.
+        /// </summary>
+        internal static string LangUkrainian {
+            get {
+                return ResourceManager.GetString("LangUkrainian", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exit.
+        /// </summary>
+        internal static string MenuExit {
+            get {
+                return ResourceManager.GetString("MenuExit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _File.
+        /// </summary>
+        internal static string MenuFile {
+            get {
+                return ResourceManager.GetString("MenuFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Language.
+        /// </summary>
+        internal static string MenuLanguage {
+            get {
+                return ResourceManager.GetString("MenuLanguage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Theme.
+        /// </summary>
+        internal static string MenuTheme {
+            get {
+                return ResourceManager.GetString("MenuTheme", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dark.
+        /// </summary>
+        internal static string MenuThemeDark {
+            get {
+                return ResourceManager.GetString("MenuThemeDark", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Light.
+        /// </summary>
+        internal static string MenuThemeLight {
+            get {
+                return ResourceManager.GetString("MenuThemeLight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _View.
+        /// </summary>
+        internal static string MenuView {
+            get {
+                return ResourceManager.GetString("MenuView", resourceCulture);
             }
         }
         
@@ -124,11 +214,47 @@ namespace TaskbarIconOverlay.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Bottom-left corner of the icon.
+        /// </summary>
+        internal static string PositionBottomLeft {
+            get {
+                return ResourceManager.GetString("PositionBottomLeft", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bottom-right corner of the icon.
+        /// </summary>
+        internal static string PositionBottomRight {
+            get {
+                return ResourceManager.GetString("PositionBottomRight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Number position.
         /// </summary>
         internal static string PositionLabel {
             get {
                 return ResourceManager.GetString("PositionLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Top-left corner of the icon.
+        /// </summary>
+        internal static string PositionTopLeft {
+            get {
+                return ResourceManager.GetString("PositionTopLeft", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Top-right corner of the icon.
+        /// </summary>
+        internal static string PositionTopRight {
+            get {
+                return ResourceManager.GetString("PositionTopRight", resourceCulture);
             }
         }
         
@@ -156,6 +282,15 @@ namespace TaskbarIconOverlay.App.Resources {
         internal static string StickyBinding {
             get {
                 return ResourceManager.GetString("StickyBinding", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to When enabled, an icon stays with the same window even if it moves to a different taskbar position. When disabled, icons follow position instead of the window..
+        /// </summary>
+        internal static string StickyBindingHint {
+            get {
+                return ResourceManager.GetString("StickyBindingHint", resourceCulture);
             }
         }
         
@@ -201,6 +336,51 @@ namespace TaskbarIconOverlay.App.Resources {
         internal static string ToggleEnable {
             get {
                 return ResourceManager.GetString("ToggleEnable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Working....
+        /// </summary>
+        internal static string ToggleWorking {
+            get {
+                return ResourceManager.GetString("ToggleWorking", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exit.
+        /// </summary>
+        internal static string TrayExit {
+            get {
+                return ResourceManager.GetString("TrayExit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show.
+        /// </summary>
+        internal static string TrayShow {
+            get {
+                return ResourceManager.GetString("TrayShow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to TaskbarIconOverlay.
+        /// </summary>
+        internal static string TrayTooltip {
+            get {
+                return ResourceManager.GetString("TrayTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to TaskbarIconOverlay - taskbar icon overlays.
+        /// </summary>
+        internal static string WindowTitle {
+            get {
+                return ResourceManager.GetString("WindowTitle", resourceCulture);
             }
         }
     }

@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Windows.Media;
 using System.Windows.Threading;
+using TaskbarIconOverlay.App.Localization;
 using TaskbarIconOverlay.App.Models;
 using TaskbarIconOverlay.App.Services;
 
@@ -53,6 +54,10 @@ public sealed class MainViewModel : ViewModelBase
         BrowseIconCommand = new RelayCommand(param => BrowseIcon(param as IconSlotViewModel));
         ApplyCommand = new RelayCommand(_ => Apply());
         ToggleEnabledCommand = new RelayCommand(_ => ToggleEnabled());
+        ExitMenuItemCommand = new RelayCommand(_ => ExitMenuItem());
+        EnglishLanguageMenuItemCommand = new RelayCommand(_ => EnglishLanguageMenuItem());
+        UkrainianLanguageMenuItemCommand = new RelayCommand(_ => UkrainianLanguageMenuItem());
+        RussianLanguageMenuItemCommand = new RelayCommand(_ => RussianLanguageMenuItem());
     }
 
     public ObservableCollection<IconSlotViewModel> Slots { get; }
@@ -140,6 +145,10 @@ public sealed class MainViewModel : ViewModelBase
     public RelayCommand BrowseIconCommand { get; }
     public RelayCommand ApplyCommand { get; }
     public RelayCommand ToggleEnabledCommand { get; }
+    public RelayCommand ExitMenuItemCommand { get; }
+    public RelayCommand EnglishLanguageMenuItemCommand { get; }
+    public RelayCommand UkrainianLanguageMenuItemCommand { get; }
+    public RelayCommand RussianLanguageMenuItemCommand { get; }
 
     private void AddSlot()
     {
@@ -188,6 +197,21 @@ public sealed class MainViewModel : ViewModelBase
         IsEnabled = !IsEnabled;
         _configWriter.SetEnabled(IsEnabled);
     }
+
+    private void ExitMenuItem()
+    {
+        _configWriter.SetEnabled(false);
+        App.Current.Shutdown();
+    }
+
+    private void EnglishLanguageMenuItem() =>
+        LocalizationManager.Instance.SetLanguage(AppLanguage.English);
+
+    private void UkrainianLanguageMenuItem() =>
+        LocalizationManager.Instance.SetLanguage(AppLanguage.Ukrainian);
+
+    private void RussianLanguageMenuItem() =>
+        LocalizationManager.Instance.SetLanguage(AppLanguage.Russian);
 
     /// <summary>
     /// Restarts the debounce timer - only the LAST call within

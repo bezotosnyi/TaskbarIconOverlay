@@ -1,13 +1,15 @@
-﻿<Application x:Class="TaskbarIconOverlay.App.App"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:TaskbarIconOverlay.App"
-             xmlns:converters="clr-namespace:TaskbarIconOverlay.App.Converters">
+﻿<Application
+    x:Class="TaskbarIconOverlay.App.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converters="clr-namespace:TaskbarIconOverlay.App.Converters"
+    xmlns:local="clr-namespace:TaskbarIconOverlay.App">
     <Application.Resources>
-        <converters:BoolToVisibilityConverter x:Key="BoolToVis"/>
-        <converters:BoolToMaxNumberedConverter x:Key="BoolToMaxNumbered"/>
-        <converters:ColorToBrushConverter x:Key="ColorToBrush"/>
-        <converters:NumberPositionToHorizontalAlignmentConverter x:Key="PosToH"/>
-        <converters:NumberPositionToVerticalAlignmentConverter x:Key="PosToV"/>
+        <converters:BoolToVisibilityConverter x:Key="BoolToVis" />
+        <converters:BoolToMaxNumberedConverter x:Key="BoolToMaxNumbered" />
+        <converters:ColorToBrushConverter x:Key="ColorToBrush" />
+        <converters:NumberPositionToHorizontalAlignmentConverter x:Key="PosToH" />
+        <converters:NumberPositionToVerticalAlignmentConverter x:Key="PosToV" />
+        <converters:LanguageEqualsConverter x:Key="LanguageEquals" />
     </Application.Resources>
 </Application>

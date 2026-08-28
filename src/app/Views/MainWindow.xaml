@@ -170,10 +170,28 @@
                         Content="{Binding Source={x:Static loc:LocalizationManager.Instance}, Path=[AllowBeyondTen]}"
                         IsChecked="{Binding AllowNumbersBeyondTen}" />
 
-                    <CheckBox
-                        Margin="0,0,0,12"
-                        Content="{Binding Source={x:Static loc:LocalizationManager.Instance}, Path=[StickyBinding]}"
-                        IsChecked="{Binding StickyIconBinding}" />
+                    <StackPanel Margin="0,0,0,12" Orientation="Horizontal">
+                        <CheckBox
+                            VerticalAlignment="Center"
+                            Content="{Binding Source={x:Static loc:LocalizationManager.Instance}, Path=[StickyBinding]}"
+                            IsChecked="{Binding StickyIconBinding}" />
+
+                        <TextBlock
+                            Margin="6,0,0,0"
+                            VerticalAlignment="Center"
+                            Cursor="Help"
+                            FontWeight="Bold"
+                            Text="?">
+                            <TextBlock.ToolTip>
+                                <ToolTip>
+                                    <TextBlock
+                                        MaxWidth="350"
+                                        Text="{Binding Source={x:Static loc:LocalizationManager.Instance}, Path=[StickyBindingHint]}"
+                                        TextWrapping="Wrap" />
+                                </ToolTip>
+                            </TextBlock.ToolTip>
+                        </TextBlock>
+                    </StackPanel>
 
                     <TextBlock Margin="0,0,0,4" Text="{Binding Source={x:Static loc:LocalizationManager.Instance}, Path=[PositionLabel]}" />
 

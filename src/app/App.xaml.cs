@@ -1,5 +1,6 @@
-﻿using System.Windows;
-using MahApps.Metro.Controls.Dialogs;
+﻿using MahApps.Metro.Controls.Dialogs;
+using System.Threading.Tasks;
+using System.Windows;
 using TaskbarIconOverlay.App.Extensions;
 using TaskbarIconOverlay.App.Localization;
 using TaskbarIconOverlay.App.Services;
@@ -16,6 +17,8 @@ public partial class App : Application
     private EngineController? _engineController;
     private MainViewModel? _mainViewModel;
     private TrayIconManager? _trayIconManager;
+
+    private bool _shutdownStarted;
 
     protected override async void OnStartup(StartupEventArgs e)
     {
@@ -71,23 +74,46 @@ public partial class App : Application
 
     protected override async void OnExit(ExitEventArgs e)
     {
-        if (_engineController is not null)
+        await ShutdownAsync();
+        base.OnExit(e);
+    }
+
+    protected override async void OnSessionEnding(SessionEndingCancelEventArgs e)
+    {
+        await ShutdownAsync();
+        base.OnSessionEnding(e);
+    }
+
+    private async Task ShutdownAsync()
+    {
+        if (_shutdownStarted)
         {
-            var result = await _engineController.DisableAsync();
-            if (result != EngineResult.Disabled)
+            return;
+        }
+
+        _shutdownStarted = true;
+
+        try
+        {
+            if (_engineController is not null)
             {
-                // TODO: add logging or error handling here
+                var result = await _engineController.DisableAsync();
+                if (result != EngineResult.Disabled)
+                {
+                    // TODO: add logging or error handling here
+                }
+            }
+
+            if (_mainViewModel is not null)
+            {
+                var settings = _mainViewModel.GetAppSettings();
+                _settingsPersistenceService?.Save(settings);
             }
         }
-
-        if (_mainViewModel is not null)
+        finally
         {
-            var settings = _mainViewModel.GetAppSettings();
-            _settingsPersistenceService?.Save(settings);
+            _trayIconManager?.Dispose();
+            _configWriter?.Dispose();
         }
-
-        _trayIconManager?.Dispose();
-        _configWriter?.Dispose();
-        base.OnExit(e);
     }
 }

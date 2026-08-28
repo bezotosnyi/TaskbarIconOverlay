@@ -1,4 +1,5 @@
-﻿using MahApps.Metro.Controls.Dialogs;
+﻿using System.Threading;
+using MahApps.Metro.Controls.Dialogs;
 using System.Threading.Tasks;
 using System.Windows;
 using TaskbarIconOverlay.App.Extensions;
@@ -12,17 +13,34 @@ namespace TaskbarIconOverlay.App;
 
 public partial class App : Application
 {
+    private const string InstanceMutexName = "Local\\TaskbarIconOverlay_SingleInstance";
+
     private SettingsPersistenceService? _settingsPersistenceService;
     private SharedConfigWriter? _configWriter;
     private EngineController? _engineController;
     private MainViewModel? _mainViewModel;
     private TrayIconManager? _trayIconManager;
 
+    private Mutex? _instanceMutex;
     private bool _shutdownStarted;
 
     protected override async void OnStartup(StartupEventArgs e)
     {
         base.OnStartup(e);
+
+        _instanceMutex = new Mutex(
+            initiallyOwned: true,
+            name: InstanceMutexName,
+            createdNew: out var createdNew);
+
+        if (!createdNew)
+        {
+            _instanceMutex.Dispose();
+            _instanceMutex = null;
+
+            Shutdown();
+            return;
+        }
 
         _settingsPersistenceService = new SettingsPersistenceService();
         _configWriter = new SharedConfigWriter();
@@ -57,7 +75,7 @@ public partial class App : Application
                 message, MessageDialogStyle.Affirmative, dialogSettings);
 
             splash.Close();
-            Shutdown();
+            await ShutdownAsync();
             return;
         }
 
@@ -114,6 +132,7 @@ public partial class App : Application
         {
             _trayIconManager?.Dispose();
             _configWriter?.Dispose();
+            _instanceMutex?.Dispose();
         }
     }
 }

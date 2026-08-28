@@ -13,6 +13,7 @@
     Height="515"
     d:DataContext="{d:DesignInstance Type=vm:MainViewModel,
                                      IsDesignTimeCreatable=False}"
+    Icon="pack://application:,,,/Assets/AppIcon.ico"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
 

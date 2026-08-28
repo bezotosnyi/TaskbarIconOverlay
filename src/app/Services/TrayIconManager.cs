@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Drawing;
+using System.IO;
 using System.Windows;
 using System.Windows.Forms;
 using TaskbarIconOverlay.App.Localization;
@@ -30,7 +32,7 @@ public sealed class TrayIconManager : IDisposable
 
         _notifyIcon = new NotifyIcon
         {
-            Icon = System.Drawing.SystemIcons.Application,
+            Icon = LoadAppIcon(),
             Visible = true,
             ContextMenuStrip = _menu
         };
@@ -64,6 +66,16 @@ public sealed class TrayIconManager : IDisposable
         _mainWindow.WindowState = WindowState.Normal;
         _mainWindow.Show();
         _mainWindow.Activate();
+    }
+
+    private static Icon LoadAppIcon()
+    {
+        var path = Path.Combine(
+            AppContext.BaseDirectory,
+            "Assets",
+            "AppIcon.ico");
+
+        return new Icon(path);
     }
 
     public void Dispose()

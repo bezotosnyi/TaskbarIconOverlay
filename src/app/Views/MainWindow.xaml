@@ -219,15 +219,23 @@
                         <models:NumberPosition>BottomRight</models:NumberPosition>
                     </ComboBox>
 
-                    <TextBlock Margin="0,0,0,4" Text="{Binding Source={x:Static loc:LocalizationManager.Instance}, Path=[FontSizeLabel]}" />
+                    <StackPanel Margin="0,0,0,12">
+                        <DockPanel Margin="0,0,0,4">
+                            <TextBlock Text="{Binding Source={x:Static loc:LocalizationManager.Instance}, Path=[FontSizeLabel]}" />
 
-                    <Slider
-                        Margin="0,0,0,12"
-                        IsSnapToTickEnabled="True"
-                        Maximum="16"
-                        Minimum="8"
-                        TickFrequency="1"
-                        Value="{Binding NumberSize}" />
+                            <TextBlock
+                                Margin="8,0,0,0"
+                                DockPanel.Dock="Right"
+                                Text="{Binding NumberSize, StringFormat={}{0} px}" />
+                        </DockPanel>
+
+                        <Slider
+                            IsSnapToTickEnabled="True"
+                            Maximum="16"
+                            Minimum="8"
+                            TickFrequency="1"
+                            Value="{Binding NumberSize}" />
+                    </StackPanel>
 
                     <CheckBox Content="{Binding Source={x:Static loc:LocalizationManager.Instance}, Path=[ShowOnAllTaskbars]}" IsChecked="{Binding ShowOnAllTaskbars}" />
                 </StackPanel>

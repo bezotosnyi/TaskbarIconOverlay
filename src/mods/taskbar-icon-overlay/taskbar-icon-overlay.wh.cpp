@@ -293,6 +293,8 @@ std::vector<RootEntry> g_trackedRoots;
 std::unordered_map<int, IconResource> g_iconResourceMap;
 std::mutex g_mapMutex;
 
+bool g_isAppConnected = false;
+
 HANDLE g_hMapping = nullptr;
 SharedConfig::Layout* g_config = nullptr;
 HANDLE g_hEnabledEvent = nullptr;
@@ -300,7 +302,9 @@ HANDLE g_hConfigChangedEvent = nullptr;
 HANDLE g_hWatcherThread = nullptr;
 volatile bool g_watcherShouldStop = false;
 
+// Forward declarations
 DWORD WINAPI ConfigWatcherThreadProc(LPVOID);
+bool ConnectToApp();
 
 // Helper function to find button in vector
 auto FindButtonInVector = [](const std::vector<ButtonInformation>& buttons, const FrameworkElement& targetButton) {
@@ -644,7 +648,19 @@ void RemoveExistingOverlays(FrameworkElement iconPanel) {
 }
 
 bool IsEnabledByController() {
-    if (!g_hEnabledEvent) return false;
+    // Try to connect to the app if not already connected
+    if (!g_isAppConnected) {
+        Wh_Log(L"IsEnabledByController: Not connected to app, attempting to connect...");
+        g_isAppConnected = ConnectToApp();
+
+        if (!g_isAppConnected) {
+            Wh_Log(L"IsEnabledByController: Failed to connect to app");
+            return false;
+        }
+        Wh_Log(L"IsEnabledByController: Successfully connected to app");
+    }
+
+    if (!g_isAppConnected || !g_hEnabledEvent) return false;
     return WaitForSingleObject(g_hEnabledEvent, 0) == WAIT_OBJECT_0;
 }
 
@@ -1048,7 +1064,7 @@ bool ConnectToApp() {
         return false;
     }
 
-    g_config = reinterpret_cast<SharedConfig::Layout*>(
+    g_config = static_cast<SharedConfig::Layout*>(
         MapViewOfFile(g_hMapping, FILE_MAP_READ, 0, 0, sizeof(SharedConfig::Layout)));
     if (!g_config) {
         Wh_Log(L"MapViewOfFile failed");
@@ -1084,7 +1100,12 @@ void DisconnectFromApp() {
 }
 
 BOOL Wh_ModInit() {
-    ConnectToApp();
+    g_isAppConnected = ConnectToApp();
+
+    if (!g_isAppConnected) {
+        Wh_Log(L"Wh_ModInit: Failed to connect to app, will attempt to connect later");
+        g_config = new SharedConfig::Layout();
+    }
 
     LoadSettings();
 
@@ -1096,7 +1117,7 @@ BOOL Wh_ModInit() {
     }
     else {
         HMODULE kernelBaseModule = GetModuleHandle(L"kernelbase.dll");
-        auto pKernelBaseLoadLibraryExW = (decltype(&LoadLibraryExW))GetProcAddress(kernelBaseModule, "LoadLibraryExW");
+        auto pKernelBaseLoadLibraryExW = reinterpret_cast<decltype(&LoadLibraryExW)>(GetProcAddress(kernelBaseModule, "LoadLibraryExW"));
         WindhawkUtils::SetFunctionHook(pKernelBaseLoadLibraryExW, LoadLibraryExW_Hook, &LoadLibraryExW_Original);
     }
 

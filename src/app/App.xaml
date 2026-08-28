@@ -19,6 +19,7 @@
             <converters:NumberPositionToHorizontalAlignmentConverter x:Key="PosToH" />
             <converters:NumberPositionToVerticalAlignmentConverter x:Key="PosToV" />
             <converters:LanguageEqualsConverter x:Key="LanguageEquals" />
+            <converters:NumberPositionToLocalizedStringConverter x:Key="NumberPosToLocStr" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

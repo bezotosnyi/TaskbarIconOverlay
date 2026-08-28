@@ -178,6 +178,22 @@
                     <TextBlock Margin="0,0,0,4" Text="{Binding Source={x:Static loc:LocalizationManager.Instance}, Path=[PositionLabel]}" />
 
                     <ComboBox Margin="0,0,0,12" SelectedItem="{Binding NumberPosition}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock>
+                                    <TextBlock.Text>
+                                        <MultiBinding Converter="{StaticResource NumberPosToLocStr}">
+                                            <!--  NumberPosition  -->
+                                            <Binding />
+
+                                            <!--  Trigger when language changes  -->
+                                            <Binding Path="CurrentLanguage" Source="{x:Static loc:LocalizationManager.Instance}" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+
                         <models:NumberPosition>TopLeft</models:NumberPosition>
                         <models:NumberPosition>TopRight</models:NumberPosition>
                         <models:NumberPosition>BottomLeft</models:NumberPosition>

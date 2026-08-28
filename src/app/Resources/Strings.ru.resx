@@ -99,7 +99,7 @@
 		<value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
 	</resheader>
 
-	<data name="WindowTitle" xml:space="preserve"><value>TaskbarIconOverlay - оверлеи иконок панели задач</value></data>
+	<data name="WindowTitle" xml:space="preserve"><value>Оверлеи иконок панели задач</value></data>
 
 	<data name="ToggleEnable" xml:space="preserve"><value>Включить</value></data>
 	<data name="ToggleDisable" xml:space="preserve"><value>Выключить</value></data>

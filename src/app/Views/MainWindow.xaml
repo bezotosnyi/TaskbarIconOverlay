@@ -9,8 +9,8 @@
     xmlns:models="clr-namespace:TaskbarIconOverlay.App.Models"
     xmlns:vm="clr-namespace:TaskbarIconOverlay.App.ViewModels"
     Title="{Binding Source={x:Static loc:LocalizationManager.Instance}, Path=[WindowTitle]}"
-    Width="520"
-    Height="640"
+    Width="640"
+    Height="515"
     d:DataContext="{d:DesignInstance Type=vm:MainViewModel,
                                      IsDesignTimeCreatable=False}"
     WindowStartupLocation="CenterScreen"
@@ -61,7 +61,8 @@
             Height="36"
             Margin="0,12,0,0"
             Command="{Binding ToggleEnabledCommand}"
-            DockPanel.Dock="Bottom">
+            DockPanel.Dock="Bottom"
+            FontSize="16">
             <TextBlock>
                 <TextBlock.Style>
                     <Style TargetType="TextBlock">

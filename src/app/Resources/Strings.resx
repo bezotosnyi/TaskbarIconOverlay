@@ -142,4 +142,15 @@
 	<data name="TrayExit" xml:space="preserve"><value>Exit</value></data>
 	<data name="TrayTooltip" xml:space="preserve"><value>TaskbarIconOverlay</value></data>
 
+	<data name="SplashInitializing" xml:space="preserve"><value>Initializing...</value></data>
+
+	<data name="EngineExplorerNotFound" xml:space="preserve"><value>Could not find explorer.exe.</value></data>
+	<data name="EngineOpenProcessFailed" xml:space="preserve"><value>Could not open explorer.exe.</value></data>
+	<data name="EngineWindhawkConflict" xml:space="preserve"><value>Another Windhawk instance is already running in explorer.exe.</value></data>
+	<data name="EngineDllNotFound" xml:space="preserve"><value>Engine.dll could not be found next to injector.exe.</value></data>
+	<data name="EngineInjectionFailed" xml:space="preserve"><value>Failed to inject the engine into explorer.exe.</value></data>
+	<data name="EngineRemoteExportCallFailed" xml:space="preserve"><value>Failed to shut down the engine in explorer.exe.</value></data>
+	<data name="EngineUsageError" xml:space="preserve"><value>The engine injector was called with an invalid command.</value></data>
+	<data name="EngineUnknownError" xml:space="preserve"><value>An unexpected engine error occurred. Please check the log file for more details.</value></data>
+
 </root>

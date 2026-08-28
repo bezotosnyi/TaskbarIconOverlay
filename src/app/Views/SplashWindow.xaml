@@ -1,0 +1,39 @@
+﻿<mah:MetroWindow
+    x:Class="TaskbarIconOverlay.App.Views.SplashWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:loc="clr-namespace:TaskbarIconOverlay.App.Localization"
+    xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+    Width="400"
+    Height="180"
+    ResizeMode="NoResize"
+    ShowCloseButton="False"
+    ShowInTaskbar="False"
+    ShowMaxRestoreButton="False"
+    ShowMinButton="False"
+    ShowTitleBar="False"
+    WindowStartupLocation="CenterScreen"
+    WindowStyle="None">
+
+    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+
+        <TextBlock
+            HorizontalAlignment="Center"
+            FontSize="24"
+            FontWeight="SemiBold"
+            Text="{Binding Source={x:Static loc:LocalizationManager.Instance}, Path=[WindowTitle]}" />
+
+        <mah:ProgressRing
+            Width="32"
+            Height="32"
+            Margin="0,20,0,12"
+            IsActive="True" />
+
+        <TextBlock
+            HorizontalAlignment="Center"
+            Opacity="0.7"
+            Text="{Binding Source={x:Static loc:LocalizationManager.Instance}, Path=[SplashInitializing]}" />
+
+    </StackPanel>
+
+</mah:MetroWindow>

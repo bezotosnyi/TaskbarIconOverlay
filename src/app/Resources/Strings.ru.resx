@@ -142,4 +142,15 @@
 	<data name="TrayExit" xml:space="preserve"><value>Выйти</value></data>
 	<data name="TrayTooltip" xml:space="preserve"><value>TaskbarIconOverlay</value></data>
 
+	<data name="SplashInitializing" xml:space="preserve"><value>Инициализация...</value></data>
+
+	<data name="EngineExplorerNotFound" xml:space="preserve"><value>Не удалось найти explorer.exe.</value></data>
+	<data name="EngineOpenProcessFailed" xml:space="preserve"><value>Не удалось открыть explorer.exe.</value></data>
+	<data name="EngineWindhawkConflict" xml:space="preserve"><value>В explorer.exe уже запущен другой экземпляр Windhawk.</value></data>
+	<data name="EngineDllNotFound" xml:space="preserve"><value>Не удалось найти Engine.dll рядом с injector.exe.</value></data>
+	<data name="EngineInjectionFailed" xml:space="preserve"><value>Не удалось внедрить движок в explorer.exe.</value></data>
+	<data name="EngineRemoteExportCallFailed" xml:space="preserve"><value>Не удалось отключить движок в explorer.exe.</value></data>
+	<data name="EngineUsageError" xml:space="preserve"><value>Инжектор движка был запущен с некорректной командой.</value></data>
+	<data name="EngineUnknownError" xml:space="preserve"><value>Произошла непредвиденная ошибка движка. Проверьте файл журнала для получения дополнительной информации.</value></data>
+
 </root>

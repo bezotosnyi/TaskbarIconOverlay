@@ -1,6 +1,9 @@
 ﻿using System.Windows;
+using MahApps.Metro.Controls.Dialogs;
+using TaskbarIconOverlay.App.Extensions;
 using TaskbarIconOverlay.App.Localization;
 using TaskbarIconOverlay.App.Services;
+using TaskbarIconOverlay.App.Services.Engine;
 using TaskbarIconOverlay.App.ViewModels;
 using TaskbarIconOverlay.App.Views;
 
@@ -28,6 +31,35 @@ public partial class App : Application
             LocalizationManager.Instance.SetLanguage(settings.Language);
         }
 
+        var splash = new SplashWindow();
+        splash.Show();
+
+        var result = await _engineController.EnableAsync();
+        if (result != EngineResult.Enabled)
+        {
+            var message = LocalizationManager.Instance[
+                result.GetLocalizationKey()
+            ];
+
+            var dialogSettings = new MetroDialogSettings()
+            {
+                DialogTitleFontSize = 16,
+                DialogMessageFontSize = 14,
+                DialogButtonFontSize = 14,
+                AnimateShow = true,
+                AnimateHide = true
+            };
+            await splash.ShowMessageAsync(
+                LocalizationManager.Instance["WindowTitle"],
+                message, MessageDialogStyle.Affirmative, dialogSettings);
+
+            splash.Close();
+            Shutdown();
+            return;
+        }
+
+        splash.Close();
+
         var fileDialogService = new FileDialogService();
         _mainViewModel = new MainViewModel(fileDialogService, _configWriter, settings);
 
@@ -35,28 +67,23 @@ public partial class App : Application
         _trayIconManager = new TrayIconManager(window);
 
         window.Show();
-
-        var injected = await _engineController.EnableAsync();
-        if (!injected)
-        {
-            MessageBox.Show(window,
-                "Не вдалось ін'єктувати рушій у explorer.exe. Перевірте " +
-                "TaskbarIconOverlay.log поруч із програмою.",
-                "TaskbarIconOverlay", MessageBoxButton.OK, MessageBoxImage.Warning);
-        }
     }
 
     protected override async void OnExit(ExitEventArgs e)
     {
+        if (_engineController is not null)
+        {
+            var result = await _engineController.DisableAsync();
+            if (result != EngineResult.Disabled)
+            {
+                // TODO: add logging or error handling here
+            }
+        }
+
         if (_mainViewModel is not null)
         {
             var settings = _mainViewModel.GetAppSettings();
             _settingsPersistenceService?.Save(settings);
-        }
-
-        if (_engineController is not null)
-        {
-            await _engineController.DisableAsync();
         }
 
         _trayIconManager?.Dispose();

@@ -142,4 +142,15 @@
 	<data name="TrayExit" xml:space="preserve"><value>Вийти</value></data>
 	<data name="TrayTooltip" xml:space="preserve"><value>TaskbarIconOverlay</value></data>
 
+	<data name="SplashInitializing" xml:space="preserve"><value>Ініціалізація...</value></data>
+
+	<data name="EngineExplorerNotFound" xml:space="preserve"><value>Не вдалося знайти explorer.exe.</value></data>
+	<data name="EngineOpenProcessFailed" xml:space="preserve"><value>Не вдалося відкрити explorer.exe.</value></data>
+	<data name="EngineWindhawkConflict" xml:space="preserve"><value>У explorer.exe вже запущено інший екземпляр Windhawk.</value></data>
+	<data name="EngineDllNotFound" xml:space="preserve"><value>Не вдалося знайти Engine.dll поруч із injector.exe.</value></data>
+	<data name="EngineInjectionFailed" xml:space="preserve"><value>Не вдалося ін'єктувати рушій у explorer.exe.</value></data>
+	<data name="EngineRemoteExportCallFailed" xml:space="preserve"><value>Не вдалося вимкнути рушій у explorer.exe.</value></data>
+	<data name="EngineUsageError" xml:space="preserve"><value>Інжектор рушія було запущено з некоректною командою.</value></data>
+	<data name="EngineUnknownError" xml:space="preserve"><value>Виникла непередбачена помилка рушія. Перевірте файл журналу для отримання додаткової інформації.</value></data>
+
 </root>

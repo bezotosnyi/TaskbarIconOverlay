@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace TaskbarIconOverlay.App.Services;
+namespace TaskbarIconOverlay.App.Services.Engine;
 
 public sealed class EngineController
 {
@@ -15,10 +15,10 @@ public sealed class EngineController
             "TaskbarIconOverlay.Injector.exe");
     }
 
-    public Task<bool> EnableAsync() => RunAsync("enable");
-    public Task<bool> DisableAsync() => RunAsync("disable");
+    public Task<EngineResult> EnableAsync() => RunAsync("enable");
+    public Task<EngineResult> DisableAsync() => RunAsync("disable");
 
-    private async Task<bool> RunAsync(string command)
+    private async Task<EngineResult> RunAsync(string command)
     {
         var psi = new ProcessStartInfo(_injectorPath, command)
         {
@@ -29,9 +29,12 @@ public sealed class EngineController
         };
 
         using var process = Process.Start(psi);
-        if (process is null) return false;
+        if (process is null) return EngineResult.OpenProcessFailed;
 
         await process.WaitForExitAsync();
-        return process.ExitCode == 0;
+
+        return Enum.IsDefined(typeof(EngineResult), process.ExitCode)
+            ? (EngineResult)process.ExitCode
+            : EngineResult.UsageError;
     }
 }

@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
+using TaskbarIconOverlay.App.Extensions;
 using TaskbarIconOverlay.App.ViewModels;
 using Point = System.Windows.Point;
 
@@ -28,9 +29,9 @@ public partial class MainWindow : MetroWindow
 
     private void SlotBorder_MouseDown(object sender, MouseButtonEventArgs e)
     {
-        _dragStartPoint = e.GetPosition(null);
         if (sender is FrameworkElement { DataContext: IconSlotViewModel slot })
         {
+            _dragStartPoint = e.GetPosition(null);
             _draggedSlot = slot;
         }
     }
@@ -48,7 +49,14 @@ public partial class MainWindow : MetroWindow
 
         if (sender is FrameworkElement element)
         {
-            DragDrop.DoDragDrop(element, _draggedSlot, DragDropEffects.Move);
+            try
+            {
+                DragDrop.DoDragDrop(element, _draggedSlot, DragDropEffects.Move);
+            }
+            finally
+            {
+                _draggedSlot = null;
+            }
         }
     }
 
@@ -63,12 +71,7 @@ public partial class MainWindow : MetroWindow
         var newIndex = slots.IndexOf(targetSlot);
         if (oldIndex < 0 || newIndex < 0) return;
 
-        slots.Move(oldIndex, newIndex);  // ObservableCollection.Move raises
-                                         // CollectionChanged, which the
-                                         // ViewModel already listens to
-                                         // (RenumberSlots) - no extra
-                                         // wiring needed here.
-        _draggedSlot = null;
+        slots.Swap(oldIndex, newIndex);
     }
 
     // --- Color pickers ---

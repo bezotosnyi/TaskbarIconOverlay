@@ -45,7 +45,7 @@ public sealed class MainViewModel : ViewModelBase
         };
 
         Slots = new ObservableCollection<IconSlotViewModel>();
-        Slots.CollectionChanged += (_, _) => RenumberSlots();
+        Slots.CollectionChanged += (_, _) => ScheduleApply();
 
         if (savedSettings is not null)
         {

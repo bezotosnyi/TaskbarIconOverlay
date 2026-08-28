@@ -5,11 +5,20 @@
     xmlns:converters="clr-namespace:TaskbarIconOverlay.App.Converters"
     xmlns:local="clr-namespace:TaskbarIconOverlay.App">
     <Application.Resources>
-        <converters:BoolToVisibilityConverter x:Key="BoolToVis" />
-        <converters:BoolToMaxNumberedConverter x:Key="BoolToMaxNumbered" />
-        <converters:ColorToBrushConverter x:Key="ColorToBrush" />
-        <converters:NumberPositionToHorizontalAlignmentConverter x:Key="PosToH" />
-        <converters:NumberPositionToVerticalAlignmentConverter x:Key="PosToV" />
-        <converters:LanguageEqualsConverter x:Key="LanguageEquals" />
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Themes/Light.Blue.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <!--  converters  -->
+            <converters:BoolToVisibilityConverter x:Key="BoolToVis" />
+            <converters:BoolToMaxNumberedConverter x:Key="BoolToMaxNumbered" />
+            <converters:ColorToBrushConverter x:Key="ColorToBrush" />
+            <converters:NumberPositionToHorizontalAlignmentConverter x:Key="PosToH" />
+            <converters:NumberPositionToVerticalAlignmentConverter x:Key="PosToV" />
+            <converters:LanguageEqualsConverter x:Key="LanguageEquals" />
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

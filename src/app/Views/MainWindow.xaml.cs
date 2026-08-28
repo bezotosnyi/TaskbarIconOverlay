@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MahApps.Metro.Controls;
+using System;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -7,7 +8,7 @@ using Point = System.Windows.Point;
 
 namespace TaskbarIconOverlay.App.Views;
 
-public partial class MainWindow : Window
+public partial class MainWindow : MetroWindow
 {
     private Point _dragStartPoint;
     private IconSlotViewModel? _draggedSlot;

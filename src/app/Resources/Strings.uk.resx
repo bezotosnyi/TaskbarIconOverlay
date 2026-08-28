@@ -133,9 +133,6 @@
 	<data name="MenuExit" xml:space="preserve"><value>Вихід</value></data>
 	<data name="MenuView" xml:space="preserve"><value>_Вигляд</value></data>
 	<data name="MenuLanguage" xml:space="preserve"><value>Мова</value></data>
-	<data name="MenuTheme" xml:space="preserve"><value>Тема</value></data>
-	<data name="MenuThemeLight" xml:space="preserve"><value>Світла</value></data>
-	<data name="MenuThemeDark" xml:space="preserve"><value>Темна</value></data>
 
 	<data name="LangEnglish" xml:space="preserve"><value>English</value></data>
 	<data name="LangUkrainian" xml:space="preserve"><value>Українська</value></data>

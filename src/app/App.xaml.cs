@@ -12,6 +12,7 @@ public partial class App : Application
     private SharedConfigWriter? _configWriter;
     private EngineController? _engineController;
     private MainViewModel? _mainViewModel;
+    private TrayIconManager? _trayIconManager;
 
     protected override async void OnStartup(StartupEventArgs e)
     {
@@ -31,6 +32,8 @@ public partial class App : Application
         _mainViewModel = new MainViewModel(fileDialogService, _configWriter, settings);
 
         var window = new MainWindow { DataContext = _mainViewModel };
+        _trayIconManager = new TrayIconManager(window);
+
         window.Show();
 
         var injected = await _engineController.EnableAsync();
@@ -56,6 +59,7 @@ public partial class App : Application
             await _engineController.DisableAsync();
         }
 
+        _trayIconManager?.Dispose();
         _configWriter?.Dispose();
         base.OnExit(e);
     }

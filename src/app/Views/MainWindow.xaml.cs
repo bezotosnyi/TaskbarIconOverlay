@@ -1,5 +1,6 @@
 ﻿using MahApps.Metro.Controls;
 using System;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -105,5 +106,11 @@ public partial class MainWindow : MetroWindow
 
         var c = dialog.Color;
         return Color.FromArgb(c.A, c.R, c.G, c.B);
+    }
+
+    protected override void OnClosing(CancelEventArgs e)
+    {
+        e.Cancel = true;
+        Hide();
     }
 }

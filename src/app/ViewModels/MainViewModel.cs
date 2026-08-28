@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Windows.Media;
 using System.Windows.Threading;
+using TaskbarIconOverlay.App.Extensions;
 using TaskbarIconOverlay.App.Localization;
 using TaskbarIconOverlay.App.Models;
 using TaskbarIconOverlay.App.Services;
@@ -31,7 +32,8 @@ public sealed class MainViewModel : ViewModelBase
     private bool _showOnAllTaskbars;
     private bool _isEnabled;
 
-    public MainViewModel(IFileDialogService fileDialogService, SharedConfigWriter configWriter)
+    public MainViewModel(IFileDialogService fileDialogService, SharedConfigWriter configWriter,
+        AppSettings savedSettings)
     {
         _fileDialogService = fileDialogService;
         _configWriter = configWriter;
@@ -45,8 +47,16 @@ public sealed class MainViewModel : ViewModelBase
         Slots = new ObservableCollection<IconSlotViewModel>();
         Slots.CollectionChanged += (_, _) => RenumberSlots();
 
-        // Default preset: 1 window, no image yet.
-        Slots.Add(new IconSlotViewModel());
+        if (savedSettings is not null)
+        {
+            ApplySavedSettings(savedSettings);
+        }
+        else
+        {
+            // Default preset: 1 window, no image yet.
+            Slots.Add(new IconSlotViewModel());
+        }
+
         Apply();
 
         AddSlotCommand = new RelayCommand(_ => AddSlot());
@@ -58,6 +68,7 @@ public sealed class MainViewModel : ViewModelBase
         EnglishLanguageMenuItemCommand = new RelayCommand(_ => EnglishLanguageMenuItem());
         UkrainianLanguageMenuItemCommand = new RelayCommand(_ => UkrainianLanguageMenuItem());
         RussianLanguageMenuItemCommand = new RelayCommand(_ => RussianLanguageMenuItem());
+
     }
 
     public ObservableCollection<IconSlotViewModel> Slots { get; }
@@ -149,6 +160,23 @@ public sealed class MainViewModel : ViewModelBase
     public RelayCommand EnglishLanguageMenuItemCommand { get; }
     public RelayCommand UkrainianLanguageMenuItemCommand { get; }
     public RelayCommand RussianLanguageMenuItemCommand { get; }
+
+    public AppSettings GetAppSettings()
+    {
+        return new AppSettings
+        {
+            IconPaths = Slots.Select(x => x.ImagePath).ToList(),
+            StickyIconBinding = StickyIconBinding,
+            NumberedCount = NumberedCount,
+            AllowNumbersBeyondTen = AllowNumbersBeyondTen,
+            NumberPosition = NumberPosition,
+            NumberSize = NumberSize,
+            NumberColorHex = NumberColor.ToHex(),
+            BackgroundColorHex = BackgroundColor.ToHex(),
+            ShowOnAllTaskbars = ShowOnAllTaskbars,
+            Language = LocalizationManager.Instance.CurrentLanguage
+        };
+    }
 
     private void AddSlot()
     {
@@ -244,5 +272,29 @@ public sealed class MainViewModel : ViewModelBase
             BackgroundColorArgb = ToArgb(BackgroundColor),
             ShowOnAllTaskbars = ShowOnAllTaskbars,
         });
+    }
+
+    private void ApplySavedSettings(AppSettings savedSettings)
+    {
+        StickyIconBinding = savedSettings.StickyIconBinding;
+        NumberedCount = savedSettings.NumberedCount;
+        AllowNumbersBeyondTen = savedSettings.AllowNumbersBeyondTen;
+        NumberPosition = savedSettings.NumberPosition;
+        NumberSize = savedSettings.NumberSize;
+        NumberColor = savedSettings.NumberColorHex.ToColor(Colors.White);
+        BackgroundColor = savedSettings.BackgroundColorHex.ToColor(Color.FromArgb(0x80, 0, 0, 0));
+        ShowOnAllTaskbars = savedSettings.ShowOnAllTaskbars;
+
+        if (savedSettings.IconPaths.Count > 0)
+        {
+            Slots.Clear();
+            foreach (var iconPath in savedSettings.IconPaths)
+            {
+                Slots.Add(new IconSlotViewModel
+                {
+                    ImagePath = iconPath
+                });
+            }
+        }
     }
 }

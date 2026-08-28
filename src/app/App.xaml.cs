@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using TaskbarIconOverlay.App.Localization;
 using TaskbarIconOverlay.App.Services;
 using TaskbarIconOverlay.App.ViewModels;
 using TaskbarIconOverlay.App.Views;
@@ -7,19 +8,29 @@ namespace TaskbarIconOverlay.App;
 
 public partial class App : Application
 {
+    private SettingsPersistenceService? _settingsPersistenceService;
     private SharedConfigWriter? _configWriter;
     private EngineController? _engineController;
+    private MainViewModel? _mainViewModel;
 
     protected override async void OnStartup(StartupEventArgs e)
     {
         base.OnStartup(e);
 
+        _settingsPersistenceService = new SettingsPersistenceService();
         _configWriter = new SharedConfigWriter();
         _engineController = new EngineController();
-        var fileDialogService = new FileDialogService();
-        var viewModel = new MainViewModel(fileDialogService, _configWriter);
 
-        var window = new MainWindow { DataContext = viewModel };
+        var settings = _settingsPersistenceService.Load();
+        if (settings is not null)
+        {
+            LocalizationManager.Instance.SetLanguage(settings.Language);
+        }
+
+        var fileDialogService = new FileDialogService();
+        _mainViewModel = new MainViewModel(fileDialogService, _configWriter, settings);
+
+        var window = new MainWindow { DataContext = _mainViewModel };
         window.Show();
 
         var injected = await _engineController.EnableAsync();
@@ -34,10 +45,17 @@ public partial class App : Application
 
     protected override async void OnExit(ExitEventArgs e)
     {
+        if (_mainViewModel is not null)
+        {
+            var settings = _mainViewModel.GetAppSettings();
+            _settingsPersistenceService?.Save(settings);
+        }
+
         if (_engineController is not null)
         {
             await _engineController.DisableAsync();
         }
+
         _configWriter?.Dispose();
         base.OnExit(e);
     }

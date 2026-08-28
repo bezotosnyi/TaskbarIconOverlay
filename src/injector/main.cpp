@@ -20,9 +20,10 @@
 #include <psapi.h>
 #include <shlwapi.h>
 
-#include <iostream>
 #include <optional>
 #include <string>
+
+#include "logger.h"
 
 #pragma comment(lib, "psapi.lib")
 #pragma comment(lib, "shlwapi.lib")
@@ -63,6 +64,14 @@ namespace
         GetModuleFileNameW(nullptr, path, MAX_PATH);
         PathRemoveFileSpecW(path);
         return path;
+    }
+
+    std::wstring StringToWString(const std::string& str)
+    {
+        auto sizeNeeded = MultiByteToWideChar(CP_UTF8, 0, str.data(), static_cast<int>(str.size()), nullptr, 0);
+        std::wstring wstrTo(sizeNeeded, 0);
+        MultiByteToWideChar(CP_UTF8, 0, str.data(), static_cast<int>(str.size()), wstrTo.data(), sizeNeeded);
+        return wstrTo;
     }
 
     std::optional<DWORD> FindExplorerPid()
@@ -127,7 +136,7 @@ namespace
             FALSE, pid);
         if (!proc)
         {
-            std::wcerr << L"OpenProcess failed: " << GetLastError() << L"\n";
+            Logger::Error(L"OpenProcess failed: " + std::to_wstring(GetLastError()));
             return nullptr;
         }
 
@@ -135,14 +144,14 @@ namespace
         const auto remoteMem = VirtualAllocEx(proc, nullptr, bufSize, MEM_COMMIT, PAGE_READWRITE);
         if (!remoteMem)
         {
-            std::wcerr << L"VirtualAllocEx failed: " << GetLastError() << L"\n";
+            Logger::Error(L"VirtualAllocEx failed: " + std::to_wstring(GetLastError()));
             CloseHandle(proc);
             return nullptr;
         }
 
         if (!WriteProcessMemory(proc, remoteMem, dllPath.c_str(), bufSize, nullptr))
         {
-            std::wcerr << L"WriteProcessMemory failed: " << GetLastError() << L"\n";
+            Logger::Error(L"WriteProcessMemory failed: " + std::to_wstring(GetLastError()));
             VirtualFreeEx(proc, remoteMem, 0, MEM_RELEASE);
             CloseHandle(proc);
             return nullptr;
@@ -154,7 +163,7 @@ namespace
         const auto thread = CreateRemoteThread(proc, nullptr, 0, loadLibraryAddr, remoteMem, 0, nullptr);
         if (!thread)
         {
-            std::wcerr << L"CreateRemoteThread (LoadLibraryW) failed: " << GetLastError() << L"\n";
+            Logger::Error(L"CreateRemoteThread (LoadLibraryW) failed: " + std::to_wstring(GetLastError()));
             VirtualFreeEx(proc, remoteMem, 0, MEM_RELEASE);
             CloseHandle(proc);
             return nullptr;
@@ -170,7 +179,7 @@ namespace
 
         if (exitCode == 0)
         {
-            std::wcerr << L"LoadLibraryW returned NULL in the remote process - DLL failed to load\n";
+            Logger::Error(L"LoadLibraryW returned NULL in the remote process - DLL failed to load");
             CloseHandle(proc);
             return nullptr;
         }
@@ -189,14 +198,14 @@ namespace
         const auto localModule = LoadLibraryW(dllPath.c_str());
         if (!localModule)
         {
-            std::wcerr << L"Local LoadLibrary (for RVA calculation) failed\n";
+            Logger::Error(L"Local LoadLibrary (for RVA calculation) failed");
             return false;
         }
 
         const auto localFunc = GetProcAddress(localModule, exportName);
         if (!localFunc)
         {
-            std::wcerr << L"Export " << exportName << L" not found\n";
+            Logger::Error(L"Export " + StringToWString(exportName) + L" not found");
             FreeLibrary(localModule);
             return false;
         }
@@ -216,7 +225,7 @@ namespace
             if (!remoteArgMem ||
                 !WriteProcessMemory(proc, remoteArgMem, argString.c_str(), bufSize, nullptr))
             {
-                std::wcerr << L"Failed to write the argument into the foreign process\n";
+                Logger::Error(L"Failed to write the argument into the foreign process");
                 return false;
             }
         }
@@ -224,8 +233,7 @@ namespace
         const auto thread = CreateRemoteThread(proc, nullptr, 0, remoteFunc, remoteArgMem, 0, nullptr);
         if (!thread)
         {
-            std::wcerr << L"CreateRemoteThread (" << exportName << L") failed: "
-                << GetLastError() << L"\n";
+            Logger::Error(L"CreateRemoteThread (" + StringToWString(exportName) + L") failed: " + std::to_wstring(GetLastError()));
             if (remoteArgMem) VirtualFreeEx(proc, remoteArgMem, 0, MEM_RELEASE);
             return false;
         }
@@ -245,16 +253,16 @@ namespace
         const auto pid = FindExplorerPid();
         if (!pid)
         {
-            std::wcerr << L"explorer.exe not found\n";
+            Logger::Error(L"explorer.exe not found");
             return AsInt(ExitCode::ExplorerNotFound);
         }
 
-        std::wcout << L"explorer.exe PID = " << *pid << L"\n";
+        Logger::Info(L"Found explorer.exe PID: " + std::to_wstring(*pid));
 
         const auto checkProc = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, *pid);
         if (!checkProc)
         {
-            std::wcerr << L"OpenProcess (check) failed: " << GetLastError() << L"\n";
+            Logger::Error(L"OpenProcess (check) failed: " + std::to_wstring(GetLastError()));
             return AsInt(ExitCode::OpenProcessFailed);
         }
 
@@ -263,15 +271,14 @@ namespace
         // behavior.
         if (FindRemoteModuleBase(checkProc, L"windhawk.dll").has_value())
         {
-            std::wcerr << L"windhawk.dll detected inside explorer.exe. "
-                L"Disable Windhawk before enabling TaskbarIconOverlay.\n";
+            Logger::Error(L"windhawk.dll detected inside explorer.exe. Disable Windhawk before enabling TaskbarIconOverlay.");
             CloseHandle(checkProc);
             return AsInt(ExitCode::WindhawkConflict);
         }
 
         if (FindRemoteModuleBase(checkProc, kEngineDllName).has_value())
         {
-            std::wcout << L"Already enabled (Engine.dll already in explorer.exe).\n";
+            Logger::Info(L"Already enabled (Engine.dll already in explorer.exe).");
             CloseHandle(checkProc);
             return AsInt(ExitCode::Success);
         }
@@ -281,7 +288,7 @@ namespace
         const auto enginePath = GetExeDir() + L"\\" + kEngineDllName;
         if (!PathFileExistsW(enginePath.c_str()))
         {
-            std::wcerr << L"Not found: " << enginePath << L"\n";
+            Logger::Error(L"Not found: " + enginePath);
             return AsInt(ExitCode::EngineDllNotFound);
         }
 
@@ -293,7 +300,7 @@ namespace
 
         CloseHandle(proc);
 
-        std::wcout << L"Enabled.\n";
+        Logger::Info(L"Enabled.");
         return AsInt(ExitCode::Success);
     }
 
@@ -302,7 +309,7 @@ namespace
         const auto pid = FindExplorerPid();
         if (!pid)
         {
-            std::wcerr << L"explorer.exe not found\n";
+            Logger::Error(L"explorer.exe not found");
             return AsInt(ExitCode::ExplorerNotFound);
         }
 
@@ -312,14 +319,14 @@ namespace
             FALSE, *pid);
         if (!proc)
         {
-            std::wcerr << L"OpenProcess failed: " << GetLastError() << L"\n";
+            Logger::Error(L"OpenProcess failed: " + std::to_wstring(GetLastError()));
             return AsInt(ExitCode::OpenProcessFailed);
         }
 
         const auto remoteBase = FindRemoteModuleBase(proc, kEngineDllName);
         if (!remoteBase)
         {
-            std::wcout << L"Already disabled (Engine.dll not loaded).\n";
+            Logger::Info(L"Already disabled (Engine.dll not loaded).");
             CloseHandle(proc);
             return AsInt(ExitCode::Success);
         }
@@ -330,11 +337,11 @@ namespace
 
         if (!ok)
         {
-            std::wcerr << L"Call to " << kShutdownExportName << L" failed.\n";
+            Logger::Error(L"Call to " + StringToWString(kShutdownExportName) + L" failed.");
             return AsInt(ExitCode::RemoteExportCallFailed);
         }
 
-        std::wcout << L"Disabled (clean unhook, no explorer.exe restart).\n";
+        Logger::Info(L"Disabled (clean unhook, no explorer.exe restart).");
         return AsInt(ExitCode::Success);
     }
 
@@ -343,30 +350,32 @@ namespace
         const auto pid = FindExplorerPid();
         if (!pid)
         {
-            std::wcerr << L"explorer.exe not found\n";
+            Logger::Error(L"explorer.exe not found");
             return AsInt(ExitCode::ExplorerNotFound);
         }
 
         const auto proc = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, *pid);
         if (!proc)
         {
-            std::wcerr << L"OpenProcess failed: " << GetLastError() << L"\n";
+            Logger::Error(L"OpenProcess failed: " + std::to_wstring(GetLastError()));
             return AsInt(ExitCode::OpenProcessFailed);
         }
 
         const auto enabled = FindRemoteModuleBase(proc, kEngineDllName).has_value();
         CloseHandle(proc);
 
-        std::wcout << (enabled ? L"enabled\n" : L"disabled\n");
+        Logger::Info(L"Status: " + std::wstring(enabled ? L"enabled" : L"disabled"));
         return AsInt(enabled ? ExitCode::Enabled : ExitCode::Disabled);
     }
 } // namespace
 
 int wmain(int argc, wchar_t* argv[])
 {
+	Logger::Init(GetModuleHandle(nullptr));
+
     if (argc < 2)
     {
-        std::wcerr << L"Usage: injector.exe enable|disable|status\n";
+        Logger::Error(L"Usage: injector.exe enable|disable|status");
         return AsInt(ExitCode::UsageError);
     }
 
@@ -375,6 +384,6 @@ int wmain(int argc, wchar_t* argv[])
     if (cmd == L"disable") return CmdDisable();
     if (cmd == L"status") return CmdStatus();
 
-    std::wcerr << L"Unknown command: " << cmd << L"\n";
+    Logger::Error(L"Unknown command: " + cmd);
     return AsInt(ExitCode::UsageError);
 }

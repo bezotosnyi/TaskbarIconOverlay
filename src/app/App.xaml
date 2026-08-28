@@ -3,7 +3,8 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:converters="clr-namespace:TaskbarIconOverlay.App.Converters"
-    xmlns:local="clr-namespace:TaskbarIconOverlay.App">
+    xmlns:local="clr-namespace:TaskbarIconOverlay.App"
+    ShutdownMode="OnExplicitShutdown">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

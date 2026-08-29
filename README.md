@@ -67,31 +67,26 @@ The three required Windhawk SDK headers (`windhawk_api.h`, `windhawk_api_interna
 
 ## Project structure
 
-```
+```text
 src/
-├── engine/       TaskbarIconOverlay.Engine.dll - injected into
-│                  explorer.exe, loads mod DLLs via ModManager
-├── injector/     TaskbarIconOverlay.Injector.exe - CLI: enable/disable/status
+├── app/                  WPF application
+├── engine/               Explorer-injected engine
+├── injector/             CLI injector
 ├── mods/
-│   ├── taskbar-grouping/          fetched at build time (see above)
-│   ├── taskbar-icon-overlay/      this project's own mod - icons + Win+N
-│   │                                numbering, reads live config from the
-│   │                                WPF app via a memory-mapped file
-│   └── TaskbarIconOverlay.WindhawkWrapper/  static lib implementing the
-│                                              Wh_* API contract, statically
-│                                              linked into each mod DLL
-│                                              (so each mod gets its own
-│                                              isolated MinHook instance
-│                                              and settings storage)
-├── shared/
-│   ├── TaskbarIconOverlay.DiaSymbolResolver/  symbol resolution via a
-│   │                                            private MS DIA SDK pair
-│   └── TaskbarIconOverlay.Logger/              spdlog-based shared logger
-└── app/
-    └── TaskbarIconOverlay.App/    WPF (MVVM), MahApps.Metro theming,
-                                     tray icon, splash screen, single-instance
-                                     enforcement, en/uk/ru localization
+│   ├── shared/           Common mod code and API
+│   ├── taskbar-grouping/ Third-party taskbar grouping mod
+│   └── taskbar-icon-overlay/
+│                         Project's taskbar icon overlay mod
+├── wrapper/              Windhawk API compatibility layer
+└── shared/
+    ├── logger/           Shared spdlog-based logger
+    └── symbols/          DIA-based symbol resolver
+
+redist/                   Runtime dependencies
+scripts/                  Build and deployment scripts
 ```
+
+`taskbar-grouping` is fetched at build time, while the Windhawk compatibility layer is statically linked into each mod DLL to keep MinHook instances and settings storage isolated.
 
 ## Known limitations
 

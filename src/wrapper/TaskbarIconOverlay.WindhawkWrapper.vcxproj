@@ -89,6 +89,12 @@
     <Manifest>
       <EnableSegmentHeap>true</EnableSegmentHeap>
     </Manifest>
+    <PreBuildEvent>
+      <Command>powershell -ExecutionPolicy Bypass -File "$(SolutionDir)scripts\fetch-windhawk-headers.ps1" -SolutionDir "$(SolutionDir)."</Command>
+    </PreBuildEvent>
+    <PreBuildEvent>
+      <Message>Checking and downloading Windhawk SDK headers...</Message>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -113,6 +119,12 @@
     <Manifest>
       <EnableSegmentHeap>true</EnableSegmentHeap>
     </Manifest>
+    <PreBuildEvent>
+      <Command>powershell -ExecutionPolicy Bypass -File "$(SolutionDir)scripts\fetch-windhawk-headers.ps1" -SolutionDir "$(SolutionDir)."</Command>
+    </PreBuildEvent>
+    <PreBuildEvent>
+      <Message>Checking and downloading Windhawk SDK headers...</Message>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

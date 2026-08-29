@@ -6,7 +6,8 @@ param(
 $RelativePath = "src/mods/taskbar-grouping/taskbar-grouping.wh.cpp"
 $TargetFile   = Join-Path $SolutionDir $RelativePath
 $TargetDir    = Split-Path $TargetFile -Parent
-$RawUrl       = "https://raw.githubusercontent.com/ramensoftware/windhawk-mods/refs/heads/main/mods/taskbar-grouping.wh.cpp"
+$PinnedCommit = "d8be922fa99b327d58f6085971c84cfea5863f47"
+$RawUrl       = "https://raw.githubusercontent.com/ramensoftware/windhawk-mods/$PinnedCommit/mods/taskbar-grouping.wh.cpp"
 
 
 if (Test-Path $TargetFile) {

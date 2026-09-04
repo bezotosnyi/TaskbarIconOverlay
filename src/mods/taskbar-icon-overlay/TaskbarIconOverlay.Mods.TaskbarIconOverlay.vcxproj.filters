@@ -5,4 +5,10 @@
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="mod_api.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="TaskbarIconOverlay.Mods.TaskbarIconOverlay.rc" />
+  </ItemGroup>
 </Project>

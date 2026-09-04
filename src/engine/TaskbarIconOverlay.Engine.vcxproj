@@ -21,6 +21,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="mod_manager.h" />
+    <ClInclude Include="resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="TaskbarIconOverlay.Engine.rc" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>18.0</VCProjectVersion>

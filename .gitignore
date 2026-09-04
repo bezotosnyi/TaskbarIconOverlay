@@ -15,6 +15,7 @@ x86/
 *.idb
 *.tlog
 *.log
+*.aps
 ipch/
 
 # --- vcpkg (manifest mode local install, not the vcpkg tool itself) ---
@@ -39,3 +40,4 @@ src/wrapper/include/*
 
 # Keep redist files
 !redist/*
+*.aps

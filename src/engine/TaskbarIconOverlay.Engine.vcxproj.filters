@@ -6,5 +6,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="mod_manager.h" />
+    <ClInclude Include="resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="TaskbarIconOverlay.Engine.rc" />
   </ItemGroup>
 </Project>

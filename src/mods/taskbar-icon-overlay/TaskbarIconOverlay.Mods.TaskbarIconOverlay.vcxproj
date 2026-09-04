@@ -23,6 +23,12 @@
       <Project>{b8944b45-a93a-4437-82e3-593fcb63a141}</Project>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="TaskbarIconOverlay.Mods.TaskbarIconOverlay.rc" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>18.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>

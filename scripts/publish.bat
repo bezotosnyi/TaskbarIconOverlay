@@ -1,0 +1,1 @@
+powershell -ExecutionPolicy Bypass -File "%~dp0publish.ps1" -Version 0.1.0

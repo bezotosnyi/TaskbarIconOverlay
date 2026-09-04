@@ -6,6 +6,8 @@
     <File Path="scripts/deploy_redist.bat" />
     <File Path="scripts/fetch-third-party-mods.ps1" />
     <File Path="scripts/fetch-windhawk-headers.ps1" />
+    <File Path="scripts/publish.bat" />
+    <File Path="scripts/publish.ps1" />
   </Folder>
   <Folder Name="/Solution Items/">
     <File Path=".gitattributes" />

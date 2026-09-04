@@ -187,35 +187,79 @@ namespace
         return proc;
     }
 
-    // Calls a remote export by name: computes the RVA locally (via a
-    // temporary LoadLibrary of the same DLL in our own process) and adds it
-    // to the real base address in the foreign process. argString is an
-    // optional wide string passed as the thread parameter (empty => nullptr
-    // argument).
+    // Helper to manually resolve GetProcAddress for a LOAD_LIBRARY_AS_IMAGE_RESOURCE module
+    ptrdiff_t GetRvaForExport(HMODULE hModule, const char* exportName)
+    {
+        // Clear the lower 2 bits used by the OS for image resources
+        DWORD_PTR baseAddress = reinterpret_cast<DWORD_PTR>(hModule) & ~0x3;
+
+        auto* dosHeader = reinterpret_cast<PIMAGE_DOS_HEADER>(baseAddress);
+        if (dosHeader->e_magic != IMAGE_DOS_SIGNATURE) return 0;
+
+        auto* ntHeaders = reinterpret_cast<PIMAGE_NT_HEADERS>(baseAddress + dosHeader->e_lfanew);
+        if (ntHeaders->Signature != IMAGE_NT_SIGNATURE) return 0;
+
+        // Get the Export Data Directory
+        IMAGE_DATA_DIRECTORY exportDirInfo = ntHeaders->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_EXPORT];
+        if (exportDirInfo.Size == 0) return 0;
+
+        auto* exportDir = reinterpret_cast<PIMAGE_EXPORT_DIRECTORY>(baseAddress + exportDirInfo.VirtualAddress);
+
+        auto* functions = reinterpret_cast<DWORD*>(baseAddress + exportDir->AddressOfFunctions);
+        auto* names = reinterpret_cast<DWORD*>(baseAddress + exportDir->AddressOfNames);
+        auto* ordinals = reinterpret_cast<WORD*>(baseAddress + exportDir->AddressOfNameOrdinals);
+
+        for (DWORD i = 0; i < exportDir->NumberOfNames; ++i)
+        {
+            auto currentFuncName = reinterpret_cast<const char*>(baseAddress + names[i]);
+            if (strcmp(currentFuncName, exportName) == 0)
+            {
+                WORD ordinal = ordinals[i];
+                DWORD functionRva = functions[ordinal];
+
+                // Check for forwarded exports (if the RVA points inside the export directory)
+                if (functionRva >= exportDirInfo.VirtualAddress &&
+                    functionRva < (exportDirInfo.VirtualAddress + exportDirInfo.Size))
+                {
+                    // Forwarded exports do not have a local RVA inside this code section
+                    return 0;
+                }
+                return functionRva;
+            }
+        }
+        return 0; // Export not found
+    }
+
     bool CallRemoteExport(HANDLE proc, HMODULE remoteBase, const std::wstring& dllPath,
                           const char* exportName, const std::wstring& argString)
     {
-        const auto localModule = LoadLibraryW(dllPath.c_str());
+        // Load as image resource to completely block DllMain and dependent loading
+        const auto localModule = LoadLibraryExW(
+            dllPath.c_str(),
+            nullptr,
+            LOAD_LIBRARY_AS_IMAGE_RESOURCE | LOAD_LIBRARY_AS_DATAFILE_EXCLUSIVE
+        );
+
         if (!localModule)
         {
-            Logger::Error(L"Local LoadLibrary (for RVA calculation) failed");
+            Logger::Error(L"Local LoadLibraryEx (for RVA calculation) failed");
             return false;
         }
 
-        const auto localFunc = GetProcAddress(localModule, exportName);
-        if (!localFunc)
+        // Find the RVA manually since GetProcAddress blocks image resources
+        const ptrdiff_t rva = GetRvaForExport(localModule, exportName);
+        if (rva == 0)
         {
-            Logger::Error(L"Export " + StringToWString(exportName) + L" not found");
+            Logger::Error(L"Export " + StringToWString(exportName) + L" not found or forwarded");
             FreeLibrary(localModule);
             return false;
         }
 
-        const ptrdiff_t rva = reinterpret_cast<uint8_t*>(localFunc) -
-            reinterpret_cast<uint8_t*>(localModule);
+        // Calculate remote function pointer normally using the RVA
         const auto remoteFunc = reinterpret_cast<LPTHREAD_START_ROUTINE>(
             reinterpret_cast<uint8_t*>(remoteBase) + rva);
 
-        FreeLibrary(localModule); // local copy no longer needed
+        FreeLibrary(localModule); // Local copy no longer needed
 
         LPVOID remoteArgMem = nullptr;
         if (!argString.empty())
@@ -233,7 +277,9 @@ namespace
         const auto thread = CreateRemoteThread(proc, nullptr, 0, remoteFunc, remoteArgMem, 0, nullptr);
         if (!thread)
         {
-            Logger::Error(L"CreateRemoteThread (" + StringToWString(exportName) + L") failed: " + std::to_wstring(GetLastError()));
+            Logger::Error(
+                L"CreateRemoteThread (" + StringToWString(exportName) + L") failed: " + std::to_wstring(
+                    GetLastError()));
             if (remoteArgMem) VirtualFreeEx(proc, remoteArgMem, 0, MEM_RELEASE);
             return false;
         }
@@ -271,7 +317,8 @@ namespace
         // behavior.
         if (FindRemoteModuleBase(checkProc, L"windhawk.dll").has_value())
         {
-            Logger::Error(L"windhawk.dll detected inside explorer.exe. Disable Windhawk before enabling TaskbarIconOverlay.");
+            Logger::Error(
+                L"windhawk.dll detected inside explorer.exe. Disable Windhawk before enabling TaskbarIconOverlay.");
             CloseHandle(checkProc);
             return AsInt(ExitCode::WindhawkConflict);
         }
@@ -371,7 +418,7 @@ namespace
 
 int wmain(int argc, wchar_t* argv[])
 {
-	Logger::Init(GetModuleHandle(nullptr));
+    Logger::Init(GetModuleHandle(nullptr));
 
     if (argc < 2)
     {

@@ -75,7 +75,8 @@ public partial class App : Application
                 message, MessageDialogStyle.Affirmative, dialogSettings);
 
             splash.Close();
-            await ShutdownAsync();
+            await CleanupAsync();
+            Shutdown();
             return;
         }
 
@@ -92,17 +93,17 @@ public partial class App : Application
 
     protected override async void OnExit(ExitEventArgs e)
     {
-        await ShutdownAsync();
+        await CleanupAsync();
         base.OnExit(e);
     }
 
     protected override async void OnSessionEnding(SessionEndingCancelEventArgs e)
     {
-        await ShutdownAsync();
+        await CleanupAsync();
         base.OnSessionEnding(e);
     }
 
-    private async Task ShutdownAsync()
+    private async Task CleanupAsync()
     {
         if (_shutdownStarted)
         {

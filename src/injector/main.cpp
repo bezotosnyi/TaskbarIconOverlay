@@ -20,6 +20,7 @@
 #include <psapi.h>
 #include <shlwapi.h>
 
+#include <iostream>
 #include <optional>
 #include <string>
 
@@ -72,6 +73,18 @@ namespace
         std::wstring wstrTo(sizeNeeded, 0);
         MultiByteToWideChar(CP_UTF8, 0, str.data(), static_cast<int>(str.size()), wstrTo.data(), sizeNeeded);
         return wstrTo;
+    }
+
+    void LogInfo(const std::wstring& message)
+    {
+        Logger::Info(message);
+        std::wcout << message << std::endl;
+    }
+
+    void LogError(const std::wstring& message)
+    {
+        Logger::Error(message);
+        std::wcerr << message << std::endl;
     }
 
     std::optional<DWORD> FindExplorerPid()
@@ -299,7 +312,7 @@ namespace
         const auto pid = FindExplorerPid();
         if (!pid)
         {
-            Logger::Error(L"explorer.exe not found");
+            LogError(L"explorer.exe not found");
             return AsInt(ExitCode::ExplorerNotFound);
         }
 
@@ -308,7 +321,7 @@ namespace
         const auto checkProc = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, *pid);
         if (!checkProc)
         {
-            Logger::Error(L"OpenProcess (check) failed: " + std::to_wstring(GetLastError()));
+            LogError(L"OpenProcess (check) failed: " + std::to_wstring(GetLastError()));
             return AsInt(ExitCode::OpenProcessFailed);
         }
 
@@ -317,7 +330,7 @@ namespace
         // behavior.
         if (FindRemoteModuleBase(checkProc, L"windhawk.dll").has_value())
         {
-            Logger::Error(
+            LogError(
                 L"windhawk.dll detected inside explorer.exe. Disable Windhawk before enabling TaskbarIconOverlay.");
             CloseHandle(checkProc);
             return AsInt(ExitCode::WindhawkConflict);
@@ -325,9 +338,9 @@ namespace
 
         if (FindRemoteModuleBase(checkProc, kEngineDllName).has_value())
         {
-            Logger::Info(L"Already enabled (Engine.dll already in explorer.exe).");
+            LogInfo(L"Already enabled (Engine.dll already in explorer.exe).");
             CloseHandle(checkProc);
-            return AsInt(ExitCode::Success);
+            return AsInt(ExitCode::Enabled);
         }
 
         CloseHandle(checkProc);
@@ -335,7 +348,7 @@ namespace
         const auto enginePath = GetExeDir() + L"\\" + kEngineDllName;
         if (!PathFileExistsW(enginePath.c_str()))
         {
-            Logger::Error(L"Not found: " + enginePath);
+            LogError(L"Not found: " + enginePath);
             return AsInt(ExitCode::EngineDllNotFound);
         }
 
@@ -347,8 +360,8 @@ namespace
 
         CloseHandle(proc);
 
-        Logger::Info(L"Enabled.");
-        return AsInt(ExitCode::Success);
+        LogInfo(L"Enabled.");
+        return AsInt(ExitCode::Enabled);
     }
 
     int CmdDisable()
@@ -356,7 +369,7 @@ namespace
         const auto pid = FindExplorerPid();
         if (!pid)
         {
-            Logger::Error(L"explorer.exe not found");
+            LogError(L"explorer.exe not found");
             return AsInt(ExitCode::ExplorerNotFound);
         }
 
@@ -366,14 +379,14 @@ namespace
             FALSE, *pid);
         if (!proc)
         {
-            Logger::Error(L"OpenProcess failed: " + std::to_wstring(GetLastError()));
+            LogError(L"OpenProcess failed: " + std::to_wstring(GetLastError()));
             return AsInt(ExitCode::OpenProcessFailed);
         }
 
         const auto remoteBase = FindRemoteModuleBase(proc, kEngineDllName);
         if (!remoteBase)
         {
-            Logger::Info(L"Already disabled (Engine.dll not loaded).");
+            LogInfo(L"Already disabled (Engine.dll not loaded).");
             CloseHandle(proc);
             return AsInt(ExitCode::Success);
         }
@@ -384,12 +397,12 @@ namespace
 
         if (!ok)
         {
-            Logger::Error(L"Call to " + StringToWString(kShutdownExportName) + L" failed.");
+            LogError(L"Call to " + StringToWString(kShutdownExportName) + L" failed.");
             return AsInt(ExitCode::RemoteExportCallFailed);
         }
 
-        Logger::Info(L"Disabled (clean unhook, no explorer.exe restart).");
-        return AsInt(ExitCode::Success);
+        LogInfo(L"Disabled (clean unhook, no explorer.exe restart).");
+        return AsInt(ExitCode::Disabled);
     }
 
     int CmdStatus()
@@ -397,21 +410,21 @@ namespace
         const auto pid = FindExplorerPid();
         if (!pid)
         {
-            Logger::Error(L"explorer.exe not found");
+            LogError(L"explorer.exe not found");
             return AsInt(ExitCode::ExplorerNotFound);
         }
 
         const auto proc = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, *pid);
         if (!proc)
         {
-            Logger::Error(L"OpenProcess failed: " + std::to_wstring(GetLastError()));
+            LogError(L"OpenProcess failed: " + std::to_wstring(GetLastError()));
             return AsInt(ExitCode::OpenProcessFailed);
         }
 
         const auto enabled = FindRemoteModuleBase(proc, kEngineDllName).has_value();
         CloseHandle(proc);
 
-        Logger::Info(L"Status: " + std::wstring(enabled ? L"enabled" : L"disabled"));
+        LogInfo(L"Status: " + std::wstring(enabled ? L"enabled" : L"disabled"));
         return AsInt(enabled ? ExitCode::Enabled : ExitCode::Disabled);
     }
 } // namespace
@@ -422,7 +435,7 @@ int wmain(int argc, wchar_t* argv[])
 
     if (argc < 2)
     {
-        Logger::Error(L"Usage: injector.exe enable|disable|status");
+        LogError(L"Usage: injector.exe enable|disable|status");
         return AsInt(ExitCode::UsageError);
     }
 
@@ -431,6 +444,6 @@ int wmain(int argc, wchar_t* argv[])
     if (cmd == L"disable") return CmdDisable();
     if (cmd == L"status") return CmdStatus();
 
-    Logger::Error(L"Unknown command: " + cmd);
+    LogError(L"Unknown command: " + cmd);
     return AsInt(ExitCode::UsageError);
 }

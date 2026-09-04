@@ -1132,8 +1132,8 @@ void Wh_ModAfterInit() {
 }
 
 void Wh_ModBeforeUninit() {
-    DisconnectFromApp();
     g_unloading = true;
+    DisconnectFromApp();
     RemoveAllNumberOverlays();
 }
 

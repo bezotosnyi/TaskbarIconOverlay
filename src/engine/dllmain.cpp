@@ -35,6 +35,8 @@ static DWORD WINAPI InitializeEngineWorker(void* parameter)
     modManager->LoadMod(engineDir + L"taskbar-grouping.dll");
     modManager->LoadMod(engineDir + L"taskbar-icon-overlay.dll");
 
+    Logger::Info(L"=== All mods initialized ===");
+
     return 0;
 }
 
@@ -47,9 +49,7 @@ extern "C" __declspec(dllexport) BOOL WINAPI PingEngine()
 
 // Called remotely by the injector (CreateRemoteThread + RVA lookup, see
 // CallRemoteExport in TaskbarIconOverlay.Injector/main.cpp) for a clean
-// unload without restarting explorer.exe. No hooks exist yet in this
-// minimal version, so there's nothing to unhook - this just logs and
-// frees the module.
+// unload without restarting explorer.exe
 extern "C" __declspec(dllexport) DWORD WINAPI EngineShutdown(LPVOID)
 {
     Logger::Info(L"=== EngineShutdown called ===");

@@ -190,7 +190,7 @@ $AppPublishDir = $StageDir
 & $DotNet publish $AppProject `
     -c $Configuration `
     -r win-x64 `
-    --self-contained false `
+    --self-contained true `
     -o $AppPublishDir
 
 if ($LASTEXITCODE -ne 0) {

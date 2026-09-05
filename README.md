@@ -14,6 +14,11 @@ TaskbarIconOverlay lets you assign a custom image to individual taskbar buttons 
 
 It ships as a WPF tray application: a splash screen confirms the native engine is ready, then a configuration window lets you pick how many windows to track, assign an image to each (with live preview and drag-to-reorder), and toggle the overlay on/off. Settings persist across restarts, the app runs in the tray, and closing the window minimizes to tray rather than exiting.
 
+## Compatibility
+
+- **Windows 11** — supported
+- **Windows 10** — support is in development
+
 ## Why not the public overlay-icon API
 
 Windows has a public API for taskbar icon badges – `ITaskbarList3::SetOverlayIcon` – but it's fixed at 16×16 pixels, drawn as a small corner badge on top of the existing icon by design, and applies per taskbar *group* rather than strictly per window when buttons are combined.
@@ -46,8 +51,8 @@ TaskbarIconOverlay.App (WPF)          explorer.exe
 
 ## Requirements
 
-- Windows 10/11, 64-bit
-- To build: Visual Studio 2026 (Desktop development with C++ workload,
+- Windows 11, 64-bit
+- To build: Visual Studio 2022 or later (Desktop development with C++ workload,
   plus .NET desktop development for the WPF app), [vcpkg](https://vcpkg.io/)
   in manifest mode
 
@@ -59,7 +64,7 @@ TaskbarIconOverlay.App (WPF)          explorer.exe
 
 ### Fetching third-party sources
 
-The only third-party mod bundled with the project is `taskbar-grouping` (disables taskbar button grouping so each window gets its own button). It is GPL-3.0-licensed source from the [windhawk-mods](https://github.com/ramensoftware/windhawk-mods) project, fetched automatically by the pre-build script and pinned to a specific commit for reproducibility. It is **not** vendored or committed to this repository.
+The only third-party mod used by the project is `taskbar-grouping` (disables taskbar button grouping so each window gets its own button). It is GPL-3.0-licensed source from the [windhawk-mods](https://github.com/ramensoftware/windhawk-mods) project, fetched automatically by the pre-build script and pinned to a specific commit for reproducibility. It is **not** vendored or committed to this repository.
 
 The three required Windhawk SDK headers (`windhawk_api.h`, `windhawk_api_internal.h`, `windhawk_utils.h`) are also fetched automatically during the build from a specific pinned `windhawk-mods` commit. They are placed into `src/wrapper/include/` and are **not** committed to this repository.
 
@@ -90,22 +95,24 @@ scripts/                  Build and deployment scripts
 
 ## Known limitations
 
-- No installer and updater yet - build-and-run only for now.
+- No installer and updater yet - currently distributed as a portable ZIP package.
 - Real-time config propagation from the WPF app to the native mod (over a memory-mapped file) is functional but still being hardened against edge cases.
 - Hooks into Explorer's internal taskbar rendering; expect breakage on some future Windows updates until symbols/hooks are updated accordingly.
 - `redist/` bundles renamed Microsoft DIA/SymSrv binaries for symbol resolution - their redistribution terms haven't been independently verified yet.
-- After reordering task bar items, numbering might be incorrect. This self-corrects in the next render.
+- After reordering taskbar items, numbering might be incorrect. This self-corrects in the next render.
 - After initially enabling or updating settings: numbers don't appear until first taskbar interaction (like hovering).
 
 ## Acknowledgements
 
 - `taskbar-grouping` is unmodified, GPL-3.0 licensed source from [windhawk-mods](https://github.com/ramensoftware/windhawk-mods) by m417z / Ramen Software, fetched at build time (see above).
 - The Win+N numbering approach in `taskbar-icon-overlay` was originally inspired by the `taskbar-numberer` community mod from the same project, substantially rewritten and extended since.
-- The overall symbol-hooking approach (mod lifecycle shape, signature-matching hooks) is inspired by [Windhawk](https://windhawk.eu/)'s architecture, reimplemented independently - no Windhawk installation is required on the target machine, and no Windhawk source is vendored.
-- UI built with [MahApps.Metro](https://mahapps.com/). Hooking via [MinHook](https://github.com/TsudaKageyu/minhook). Logging via [spdlog](https://github.com/gabime/spdlog).
+- The overall symbol-hooking approach (mod lifecycle shape, signature-matching hooks) is inspired by [Windhawk](https://windhawk.net/)'s architecture, reimplemented independently - no Windhawk installation is required on the target machine, and no Windhawk source is vendored.
+- UI built with [MahApps.Metro](https://mahapps.github.io/). Hooking via [MinHook](https://github.com/TsudaKageyu/minhook). Logging via [spdlog](https://github.com/gabime/spdlog).
 
 ## License
 
 **GPL-3.0, for the whole repository.**
 
-This is a direct consequence of bundling the GPL-3.0-licensed `taskbar-grouping` mod source (see Acknowledgements) as a compiled component of this project. Its compiled DLL is a derivative work and must remain GPL-3.0 with source available. Keeping the whole project under a single license also avoids ambiguity about which parts of the repository are covered by which license.
+This project includes the GPL-3.0-licensed `taskbar-grouping` mod as a compiled component. The repository is therefore distributed as a whole under GPL-3.0.
+
+See the [LICENSE](LICENSE) file for the full license text.

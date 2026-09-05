@@ -12,6 +12,8 @@
 
 TaskbarIconOverlay lets you assign a custom image to individual taskbar buttons – for example, distinguishing multiple windows of the same application (multiboxing, multiple game clients, multiple editor/terminal windows, etc.) – and optionally overlays a number (1–9, 0) matching the `Win+N` keyboard shortcut for that window's position.
 
+![TaskbarIconOverlay in action](docs/images/taskbar-icon-overlay.png)
+
 It ships as a WPF tray application: a splash screen confirms the native engine is ready, then a configuration window lets you pick how many windows to track, assign an image to each (with live preview and drag-to-reorder), and toggle the overlay on/off. Settings persist across restarts, the app runs in the tray, and closing the window minimizes to tray rather than exiting.
 
 ## Compatibility

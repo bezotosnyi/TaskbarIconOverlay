@@ -2,6 +2,10 @@
   <Configurations>
     <Platform Name="x64" />
   </Configurations>
+  <Folder Name="/docs/" />
+  <Folder Name="/docs/images/">
+    <File Path="docs/images/taskbar-icon-overlay.png" />
+  </Folder>
   <Folder Name="/scripts/">
     <File Path="scripts/deploy_redist.bat" />
     <File Path="scripts/fetch-third-party-mods.ps1" />

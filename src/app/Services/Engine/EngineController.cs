@@ -23,8 +23,6 @@ public sealed class EngineController
         var psi = new ProcessStartInfo(_injectorPath, command)
         {
             UseShellExecute = false,
-            RedirectStandardOutput = true,
-            RedirectStandardError = true,
             CreateNoWindow = true,
         };
 

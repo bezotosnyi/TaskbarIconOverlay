@@ -114,6 +114,12 @@ public partial class App : Application
 
         try
         {
+            if (_mainViewModel is not null)
+            {
+                var settings = _mainViewModel.GetAppSettings();
+                _settingsPersistenceService?.Save(settings);
+            }
+
             if (_engineController is not null)
             {
                 var result = await _engineController.DisableAsync();
@@ -121,12 +127,6 @@ public partial class App : Application
                 {
                     // TODO: add logging or error handling here
                 }
-            }
-
-            if (_mainViewModel is not null)
-            {
-                var settings = _mainViewModel.GetAppSettings();
-                _settingsPersistenceService?.Save(settings);
             }
         }
         finally

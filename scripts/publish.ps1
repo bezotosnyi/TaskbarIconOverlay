@@ -28,9 +28,10 @@ $SourceDir = Join-Path $RootDir "src"
 $RedistDir = Join-Path $RootDir "redist"
 
 $ArtifactsDir = Join-Path $RootDir "artifacts"
-$StageDir     = Join-Path $ArtifactsDir "TaskbarIconOverlay-$Version"
-$ZipPath      = Join-Path $ArtifactsDir "TaskbarIconOverlay-$Version.zip"
-$HashPath     = Join-Path $ArtifactsDir "TaskbarIconOverlay-$Version.zip.sha256"
+$PublishDir   = Join-Path $ArtifactsDir "publish"
+$StageDir     = Join-Path $PublishDir "TaskbarIconOverlay-$Version"
+$ZipPath      = Join-Path $PublishDir "TaskbarIconOverlay-$Version.zip"
+$HashPath     = Join-Path $PublishDir "TaskbarIconOverlay-$Version.zip.sha256"
 
 # -----------------------------------------------------------------------------
 # Helpers
@@ -148,16 +149,16 @@ Write-Host "dotnet:  $DotNet"
 Write-Host "Version: $Version"
 
 # -----------------------------------------------------------------------------
-# Clean artifacts
+# Clean previous artifacts
 # -----------------------------------------------------------------------------
 
 Write-Step "Cleaning artifacts"
 
-if (Test-Path -LiteralPath $ArtifactsDir) {
-    Remove-Item -LiteralPath $ArtifactsDir -Recurse -Force
+if (Test-Path -LiteralPath $PublishDir) {
+    Remove-Item -LiteralPath $PublishDir -Recurse -Force
 }
 
-New-Item -ItemType Directory -Path $ArtifactsDir -Force | Out-Null
+New-Item -ItemType Directory -Path $PublishDir -Force | Out-Null
 New-Item -ItemType Directory -Path $StageDir -Force | Out-Null
 
 # -----------------------------------------------------------------------------

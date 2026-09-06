@@ -70,12 +70,10 @@ public sealed class TrayIconManager : IDisposable
 
     private static Icon LoadAppIcon()
     {
-        var path = Path.Combine(
-            AppContext.BaseDirectory,
-            "Assets",
-            "AppIcon.ico");
+        var iconUri = new Uri("pack://application:,,,/TaskbarIconOverlay.App;component/Assets/AppIcon.ico", UriKind.Absolute);
 
-        return new Icon(path);
+        var streamInfo = Application.GetResourceStream(iconUri);
+        return streamInfo != null ? new Icon(streamInfo.Stream) : null;
     }
 
     public void Dispose()

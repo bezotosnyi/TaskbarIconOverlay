@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Text.Json;
+using TaskbarIconOverlay.App.Logging;
 using TaskbarIconOverlay.App.Models;
 
 namespace TaskbarIconOverlay.App.Services;
@@ -21,10 +22,11 @@ public sealed class SettingsPersistenceService
                 return JsonSerializer.Deserialize<AppSettings>(json) ?? new AppSettings();
             }
         }
-        catch
+        catch(Exception exception)
         {
             // Corrupted or unreadable file - fall back to defaults rather
             // than crash the app on startup.
+            Logger.Warn($"Failed to load application settings: {exception.Message}");
         }
 
         return null;
@@ -38,9 +40,10 @@ public sealed class SettingsPersistenceService
             var json = JsonSerializer.Serialize(data, new JsonSerializerOptions { WriteIndented = true });
             File.WriteAllText(FilePath, json);
         }
-        catch
+        catch(Exception exception)
         {
             // Best-effort - a failed save shouldn't crash the app either.
+            Logger.Error($"Failed to save application settings: {exception.Message}");
         }
     }
 }

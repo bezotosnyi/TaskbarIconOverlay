@@ -29,6 +29,7 @@
       <BuildDependency Project="src/injector/TaskbarIconOverlay.Injector.vcxproj" />
       <BuildDependency Project="src/mods/taskbar-grouping/TaskbarIconOverlay.Mods.TaskbarGrouping.vcxproj" />
       <BuildDependency Project="src/mods/taskbar-icon-overlay/TaskbarIconOverlay.Mods.TaskbarIconOverlay.vcxproj" />
+      <BuildDependency Project="src/shared/logger-interop/TaskbarIconOverlay.Logger.Interop.vcxproj" />
       <BuildDependency Project="src/shared/logger/TaskbarIconOverlay.Logger.vcxproj" />
       <BuildDependency Project="src/shared/symbols/TaskbarIconOverlay.DiaSymbolResolver.vcxproj" />
       <BuildDependency Project="src/wrapper/TaskbarIconOverlay.WindhawkWrapper.vcxproj" />
@@ -56,6 +57,9 @@
     </Project>
   </Folder>
   <Folder Name="/src/shared/" />
+  <Folder Name="/src/shared/logger-interop/">
+    <Project Path="src/shared/logger-interop/TaskbarIconOverlay.Logger.Interop.vcxproj" Id="aa5b5944-ece1-42c3-883e-b1a1ae476315" />
+  </Folder>
   <Folder Name="/src/shared/logger/">
     <Project Path="src/shared/logger/TaskbarIconOverlay.Logger.vcxproj" Id="3918c1f3-8f4c-4d20-a1bb-2671ebb7139d" />
   </Folder>

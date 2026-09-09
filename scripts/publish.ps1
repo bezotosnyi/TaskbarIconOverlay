@@ -231,6 +231,7 @@ function Find-BuiltBinary {
 $EngineDll   = Find-BuiltBinary "TaskbarIconOverlay.Engine.dll"
 $InjectorExe = Find-BuiltBinary "TaskbarIconOverlay.Injector.exe"
 $OverlayDll  = Find-BuiltBinary "taskbar-icon-overlay.dll"
+$LoggerInteropDll  = Find-BuiltBinary "TaskbarIconOverlay.Logger.Interop.dll"
 
 Copy-RequiredFile `
     $EngineDll `
@@ -243,6 +244,10 @@ Copy-RequiredFile `
 Copy-RequiredFile `
     $OverlayDll `
     (Join-Path $StageDir "taskbar-icon-overlay.dll")
+
+Copy-RequiredFile `
+    $LoggerInteropDll `
+    (Join-Path $StageDir "TaskbarIconOverlay.Logger.Interop.dll")
 
 # -----------------------------------------------------------------------------
 # Third-party taskbar-grouping mod

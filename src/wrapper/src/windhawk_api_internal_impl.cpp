@@ -29,6 +29,46 @@ namespace
         assert(false && "NOT_IMPLEMENTED reached");             \
     } while (0)
 
+    std::wstring FormatSettingKey(PCWSTR format, va_list args)
+    {
+        if (!format)
+        {
+            return {};
+        }
+
+        va_list argsCopy;
+        va_copy(argsCopy, args);
+
+        auto length = _vscwprintf(format, argsCopy);
+
+        va_end(argsCopy);
+
+        if (length < 0)
+        {
+            return {};
+        }
+
+        std::wstring result(static_cast<size_t>(length) + 1, L'\0');
+
+        va_copy(argsCopy, args);
+
+        int written = vswprintf_s(
+            result.data(),
+            result.size(),
+            format,
+            argsCopy);
+
+        va_end(argsCopy);
+
+        if (written < 0)
+        {
+            return {};
+        }
+
+        result.resize(static_cast<size_t>(written));
+        return result;
+    }
+
     class SettingsRegistry
     {
     public:
@@ -254,38 +294,46 @@ size_t InternalWh_GetModStoragePath(void*, PWSTR pathBuffer, size_t bufferChars)
 }
 
 // --- Settings (Wh_Get*Setting) ---
-//
-// NOTE: `args` is ignored - correct only as long as neither mod uses
-// indexed/printf-style setting names (e.g. L"items[%d].value"). Confirmed
-// safe for the exact Wh_Get*Setting call sites already grepped in both
-// taskbar-grouping and taskbar-thumbnail-reorder, but re-check this if a
-// future mod's settings usage looks different.
-
-int InternalWh_GetIntSetting(void*, PCWSTR valueName, va_list)
+int InternalWh_GetIntSetting(void*, PCWSTR valueName, va_list args)
 {
-    if (!valueName) return 0;
+    std::wstring key = FormatSettingKey(valueName, args);
+    if (key.empty())
+    {
+        return 0;
+    }
+
     int value = 0;
-    if (SettingsRegistry::Instance().GetInt(valueName, value))
+    if (SettingsRegistry::Instance().GetInt(key, value))
     {
         return value;
     }
+
     return 0;
 }
 
-PCWSTR InternalWh_GetStringSetting(void*, PCWSTR valueName, va_list)
+PCWSTR InternalWh_GetStringSetting(void*, PCWSTR valueName, va_list args)
 {
-    if (!valueName) return L"";
+    std::wstring key = FormatSettingKey(valueName, args);
+    if (key.empty())
+    {
+        return L"";
+    }
 
-    const std::wstring* str = SettingsRegistry::Instance().GetString(valueName);
-    if (!str) return L"";
+    const std::wstring* str = SettingsRegistry::Instance().GetString(key);
+    if (!str)
+    {
+        return L"";
+    }
 
     size_t sizeInBytes = (str->length() + 1) * sizeof(wchar_t);
     auto buffer = static_cast<wchar_t*>(HeapAlloc(GetProcessHeap(), 0, sizeInBytes));
 
-    if (buffer)
+    if (!buffer)
     {
-        wcscpy_s(buffer, str->length() + 1, str->c_str());
+        return L"";
     }
+
+    memcpy(buffer, str->c_str(), sizeInBytes);
     return buffer;
 }
 

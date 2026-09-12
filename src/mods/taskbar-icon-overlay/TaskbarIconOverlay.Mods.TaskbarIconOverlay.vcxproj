@@ -19,7 +19,7 @@
     <ProjectReference Include="..\..\shared\logger\TaskbarIconOverlay.Logger.vcxproj">
       <Project>{3918c1f3-8f4c-4d20-a1bb-2671ebb7139d}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\..\wrapper\TaskbarIconOverlay.WindhawkWrapper.vcxproj">
+    <ProjectReference Include="..\wrapper\TaskbarIconOverlay.WindhawkWrapper.vcxproj">
       <Project>{b8944b45-a93a-4437-82e3-593fcb63a141}</Project>
     </ProjectReference>
   </ItemGroup>
@@ -89,7 +89,7 @@
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(SolutionDir)src\wrapper\include;$(SolutionDir)src\mods\shared;$(SolutionDir)src\shared\logger;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)src\mods\wrapper\include;$(SolutionDir)src\mods\shared;$(SolutionDir)src\shared\logger;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4996;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Link>
@@ -115,7 +115,7 @@
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(SolutionDir)src\wrapper\include;$(SolutionDir)src\mods\shared;$(SolutionDir)src\shared\logger;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)src\mods\wrapper\include;$(SolutionDir)src\mods\shared;$(SolutionDir)src\shared\logger;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4996;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Link>

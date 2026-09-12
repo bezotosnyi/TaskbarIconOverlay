@@ -19,10 +19,10 @@
     <ClCompile Include="src\windhawk_api_internal_impl.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\shared\logger\TaskbarIconOverlay.Logger.vcxproj">
+    <ProjectReference Include="..\..\shared\logger\TaskbarIconOverlay.Logger.vcxproj">
       <Project>{3918c1f3-8f4c-4d20-a1bb-2671ebb7139d}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\shared\symbols\TaskbarIconOverlay.DiaSymbolResolver.vcxproj">
+    <ProjectReference Include="..\..\shared\symbols\TaskbarIconOverlay.DiaSymbolResolver.vcxproj">
       <Project>{82a48ae6-9e01-40c9-9333-03e6701dd265}</Project>
     </ProjectReference>
   </ItemGroup>

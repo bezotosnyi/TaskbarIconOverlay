@@ -23,7 +23,7 @@ $Headers = @(
     }
 )
 
-$RelativeDir = "src/wrapper/include"
+$RelativeDir = "src/mods/wrapper/include"
 $TargetDir = Join-Path $SolutionDir $RelativeDir
 
 # Check whether all required headers are already present.

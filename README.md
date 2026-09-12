@@ -68,7 +68,7 @@ TaskbarIconOverlay.App (WPF)          explorer.exe
 
 The only third-party mod used by the project is `taskbar-grouping` (disables taskbar button grouping so each window gets its own button). It is GPL-3.0-licensed source from the [windhawk-mods](https://github.com/ramensoftware/windhawk-mods) project, fetched automatically by the pre-build script and pinned to a specific commit for reproducibility. It is **not** vendored or committed to this repository.
 
-The three required Windhawk SDK headers (`windhawk_api.h`, `windhawk_api_internal.h`, `windhawk_utils.h`) are also fetched automatically during the build from a specific pinned `windhawk-mods` commit. They are placed into `src/wrapper/include/` and are **not** committed to this repository.
+The three required Windhawk SDK headers (`windhawk_api.h`, `windhawk_api_internal.h`, `windhawk_utils.h`) are also fetched automatically during the build from a specific pinned `windhawk-mods` commit. They are placed into `src/mods/wrapper/include/` and are **not** committed to this repository.
 
 `taskbar-icon-overlay`, the mod that actually draws icons and numbers, is this project's own code. Its Win+N numbering behavior was originally inspired by the `taskbar-numberer` community mod, then substantially rewritten and extended with custom icon rendering and real-time configuration from the WPF app over shared memory.
 
@@ -81,10 +81,10 @@ src/
 ├── injector/             CLI injector
 ├── mods/
 │   ├── shared/           Common mod code and API
+    ├── wrapper/          Windhawk API compatibility layer
 │   ├── taskbar-grouping/ Third-party taskbar grouping mod
 │   └── taskbar-icon-overlay/
 │                         Project's taskbar icon overlay mod
-├── wrapper/              Windhawk API compatibility layer
 └── shared/
     ├── logger/           Shared spdlog-based logger
     └── symbols/          DIA-based symbol resolver

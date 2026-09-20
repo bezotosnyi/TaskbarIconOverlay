@@ -5,6 +5,7 @@
 
 #define MyAppName "TaskbarIconOverlay"
 #define MyAppExeName "TaskbarIconOverlay.App.exe"
+#define MyAppID "DmytroBezotosnyi.TaskbarIconOverlay"
 
 [Setup]
 AppId={{8B3F9A09-2F8E-42F8-A896-C9F793B5E19D}
@@ -12,6 +13,7 @@ AppName={#MyAppName}
 AppVersion={#MyAppVersion}
 AppPublisher=Dmytro Bezotosnyi
 DefaultDirName={autopf}\{#MyAppName}
+DefaultGroupName={#MyAppName}
 DisableProgramGroupPage=yes
 OutputDir=..\artifacts\publish
 OutputBaseFilename=TaskbarIconOverlay-Setup-x64
@@ -25,6 +27,7 @@ CloseApplications=yes
 RestartApplications=no
 UninstallDisplayIcon={app}\{#MyAppExeName}
 SetupIconFile=..\src\app\Assets\AppIcon.ico
+WizardStyle=modern
 
 [CustomMessages]
 CreateStartMenuIcon=Create a &Start Menu shortcut
@@ -39,7 +42,7 @@ Source: "..\artifacts\publish\TaskbarIconOverlay-{#MyAppVersion}\*"; DestDir: "{
 [Icons]
 Name: "{autostartup}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
 Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
-Name: "{autoprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: startmenuicon
+Name: "{autoprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: startmenuicon; AppUserModelID: "{#MyAppID}"
 
 [Run]
 Filename: "{app}\{#MyAppExeName}"; Description: "Launch {#MyAppName}"; Flags: nowait postinstall skipifsilent

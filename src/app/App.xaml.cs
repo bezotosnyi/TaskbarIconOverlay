@@ -91,12 +91,17 @@ public partial class App : Application
             splash.Close();
 
             var fileDialogService = new FileDialogService();
-            _mainViewModel = new MainViewModel(fileDialogService, _configWriter, settings);
+            _mainViewModel = new MainViewModel(fileDialogService, _configWriter, new Services.Updates.UpdateService(), settings);
 
             var window = new MainWindow { DataContext = _mainViewModel };
             _trayIconManager = new TrayIconManager(window);
 
             window.Show();
+
+            if (_mainViewModel.CheckForUpdatesAutomatically)
+            {
+                await _mainViewModel.CheckForUpdatesAsync(silent: true);
+            }
         }
         catch (Exception exception)
         {

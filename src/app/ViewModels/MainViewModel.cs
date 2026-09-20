@@ -2,12 +2,17 @@
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Media;
 using System.Windows.Threading;
+using MahApps.Metro.Controls.Dialogs;
 using TaskbarIconOverlay.App.Extensions;
 using TaskbarIconOverlay.App.Localization;
+using TaskbarIconOverlay.App.Logging;
 using TaskbarIconOverlay.App.Models;
 using TaskbarIconOverlay.App.Services;
+using TaskbarIconOverlay.App.Services.Updates;
+using TaskbarIconOverlay.App.Views;
 
 namespace TaskbarIconOverlay.App.ViewModels;
 
@@ -21,6 +26,7 @@ public sealed class MainViewModel : ViewModelBase
     private readonly IFileDialogService _fileDialogService;
     private readonly SharedConfigWriter _configWriter;
     private readonly DispatcherTimer _applyDebounceTimer;
+    private readonly UpdateService _updateService;
 
     private bool _stickyIconBinding = true;
     private int _numberedCount = 10;
@@ -31,12 +37,14 @@ public sealed class MainViewModel : ViewModelBase
     private Color _backgroundColor = Color.FromArgb(0x80, 0, 0, 0);
     private bool _showOnAllTaskbars;
     private bool _isEnabled;
+    private bool _checkForUpdatesAutomatically = true;
 
     public MainViewModel(IFileDialogService fileDialogService, SharedConfigWriter configWriter,
-        AppSettings savedSettings)
+        UpdateService updateService, AppSettings savedSettings)
     {
         _fileDialogService = fileDialogService;
         _configWriter = configWriter;
+        _updateService = updateService;
 
         _applyDebounceTimer = new DispatcherTimer { Interval = ApplyDebounceInterval };
         _applyDebounceTimer.Tick += (_, _) => {
@@ -68,7 +76,8 @@ public sealed class MainViewModel : ViewModelBase
         EnglishLanguageMenuItemCommand = new RelayCommand(_ => EnglishLanguageMenuItem());
         UkrainianLanguageMenuItemCommand = new RelayCommand(_ => UkrainianLanguageMenuItem());
         RussianLanguageMenuItemCommand = new RelayCommand(_ => RussianLanguageMenuItem());
-
+        CheckForUpdatesCommand = new RelayCommand(_ => _ = CheckForUpdatesAsync(false));
+        AboutCommand = new RelayCommand(_ => ShowAbout());
     }
 
     public ObservableCollection<IconSlotViewModel> Slots { get; }
@@ -151,6 +160,12 @@ public sealed class MainViewModel : ViewModelBase
         private set => SetField(ref _isEnabled, value);
     }
 
+    public bool CheckForUpdatesAutomatically
+    {
+        get => _checkForUpdatesAutomatically;
+        set => SetField(ref _checkForUpdatesAutomatically, value);
+    }
+
     public RelayCommand AddSlotCommand { get; }
     public RelayCommand RemoveSlotCommand { get; }
     public RelayCommand BrowseIconCommand { get; }
@@ -160,6 +175,8 @@ public sealed class MainViewModel : ViewModelBase
     public RelayCommand EnglishLanguageMenuItemCommand { get; }
     public RelayCommand UkrainianLanguageMenuItemCommand { get; }
     public RelayCommand RussianLanguageMenuItemCommand { get; }
+    public RelayCommand CheckForUpdatesCommand { get; }
+    public RelayCommand AboutCommand { get; }
 
     public AppSettings GetAppSettings()
     {
@@ -174,6 +191,7 @@ public sealed class MainViewModel : ViewModelBase
             NumberColorHex = NumberColor.ToHex(),
             BackgroundColorHex = BackgroundColor.ToHex(),
             ShowOnAllTaskbars = ShowOnAllTaskbars,
+            CheckForUpdatesAutomatically = CheckForUpdatesAutomatically,
             Language = LocalizationManager.Instance.CurrentLanguage
         };
     }
@@ -241,6 +259,61 @@ public sealed class MainViewModel : ViewModelBase
     private void RussianLanguageMenuItem() =>
         LocalizationManager.Instance.SetLanguage(AppLanguage.Russian);
 
+    public async Task CheckForUpdatesAsync(bool silent)
+    {
+        try
+        {
+            var update = await _updateService.CheckAsync();
+            if (update is null)
+            {
+                if (!silent)
+                    await DialogCoordinator.Instance.ShowMessageAsync(
+                        this,
+                        LocalizationManager.Instance["MenuHelp"],
+                        LocalizationManager.Instance["UpdateNone"]);
+                return;
+            }
+
+            var answer = await DialogCoordinator.Instance.ShowMessageAsync(
+                this,
+                LocalizationManager.Instance["MenuHelp"],
+                string.Format(LocalizationManager.Instance["UpdateAvailable"], update.LatestVersion),
+                MessageDialogStyle.AffirmativeAndNegative,
+                new MetroDialogSettings
+                {
+                    AffirmativeButtonText = LocalizationManager.Instance["UpdateInstall"],
+                    NegativeButtonText = LocalizationManager.Instance["UpdateLater"],
+                });
+            if (answer != MessageDialogResult.Affirmative)
+                return;
+
+            if (update.InstallerUri is null)
+            {
+                UpdateService.OpenReleasePage(update.ReleasePageUrl);
+                return;
+            }
+
+            var installer = await _updateService.DownloadInstallerAsync(update);
+            UpdateService.LaunchInstaller(installer);
+            App.Current.Shutdown();
+        }
+        catch (Exception exception)
+        {
+            Logger.Error($"Update check failed: {exception.Message}");
+            if (!silent)
+                await DialogCoordinator.Instance.ShowMessageAsync(
+                    this,
+                    LocalizationManager.Instance["MenuHelp"],
+                    LocalizationManager.Instance["UpdateFailed"]);
+        }
+    }
+
+    private void ShowAbout()
+    {
+        var dialog = new AboutWindow { Owner = System.Windows.Application.Current.MainWindow };
+        dialog.ShowDialog();
+    }
+
     /// <summary>
     /// Restarts the debounce timer - only the LAST call within
     /// ApplyDebounceInterval actually results in a write. DispatcherTimer
@@ -284,6 +357,7 @@ public sealed class MainViewModel : ViewModelBase
         NumberColor = savedSettings.NumberColorHex.ToColor(Colors.White);
         BackgroundColor = savedSettings.BackgroundColorHex.ToColor(Color.FromArgb(0x80, 0, 0, 0));
         ShowOnAllTaskbars = savedSettings.ShowOnAllTaskbars;
+        CheckForUpdatesAutomatically = savedSettings.CheckForUpdatesAutomatically;
 
         if (savedSettings.IconPaths.Count > 0)
         {

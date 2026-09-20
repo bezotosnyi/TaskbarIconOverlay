@@ -133,6 +133,20 @@
 	<data name="MenuExit" xml:space="preserve"><value>Выход</value></data>
 	<data name="MenuView" xml:space="preserve"><value>_Вид</value></data>
 	<data name="MenuLanguage" xml:space="preserve"><value>Язык</value></data>
+	<data name="MenuSettings" xml:space="preserve"><value>_Настройки</value></data>
+	<data name="MenuHelp" xml:space="preserve"><value>_Справка</value></data>
+	<data name="MenuAbout" xml:space="preserve"><value>О программе</value></data>
+	<data name="CheckForUpdates" xml:space="preserve"><value>Проверить обновления</value></data>
+	<data name="CheckForUpdatesAutomatically" xml:space="preserve"><value>Автоматически проверять обновления</value></data>
+	<data name="UpdateNone" xml:space="preserve"><value>У вас установлена последняя версия.</value></data>
+	<data name="UpdateAvailable" xml:space="preserve"><value>Доступна версия {0}. Загрузить и установить её сейчас?</value></data>
+	<data name="UpdateFailed" xml:space="preserve"><value>Не удалось проверить обновления. Попробуйте позже.</value></data>
+	<data name="UpdateInstall" xml:space="preserve"><value>Загрузить и установить</value></data>
+	<data name="UpdateLater" xml:space="preserve"><value>Позже</value></data>
+	<data name="AboutDescription" xml:space="preserve"><value>Полноразмерные персональные иконки и нумерация ярлыков для панели задач Windows 11.</value></data>
+	<data name="AboutLicense" xml:space="preserve"><value>GPL-3.0 · Copyright © 2026 Dmytro Bezotosnyi</value></data>
+	<data name="AboutRepository" xml:space="preserve"><value>github.com/bezotosnyi/TaskbarIconOverlay</value></data>
+	<data name="Close" xml:space="preserve"><value>Закрыть</value></data>
 
 	<data name="LangEnglish" xml:space="preserve"><value>English</value></data>
 	<data name="LangUkrainian" xml:space="preserve"><value>Українська</value></data>

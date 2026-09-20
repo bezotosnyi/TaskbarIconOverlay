@@ -133,6 +133,20 @@
 	<data name="MenuExit" xml:space="preserve"><value>Exit</value></data>
 	<data name="MenuView" xml:space="preserve"><value>_View</value></data>
 	<data name="MenuLanguage" xml:space="preserve"><value>Language</value></data>
+	<data name="MenuSettings" xml:space="preserve"><value>_Settings</value></data>
+	<data name="MenuHelp" xml:space="preserve"><value>_Help</value></data>
+	<data name="MenuAbout" xml:space="preserve"><value>About</value></data>
+	<data name="CheckForUpdates" xml:space="preserve"><value>Check for updates</value></data>
+	<data name="CheckForUpdatesAutomatically" xml:space="preserve"><value>Check for updates automatically</value></data>
+	<data name="UpdateNone" xml:space="preserve"><value>You are using the latest version.</value></data>
+	<data name="UpdateAvailable" xml:space="preserve"><value>Version {0} is available. Download and install it now?</value></data>
+	<data name="UpdateFailed" xml:space="preserve"><value>Could not check for updates. Please try again later.</value></data>
+	<data name="UpdateInstall" xml:space="preserve"><value>Download and install</value></data>
+	<data name="UpdateLater" xml:space="preserve"><value>Later</value></data>
+	<data name="AboutDescription" xml:space="preserve"><value>Full-size, per-window icon overlays and shortcut numbering for the Windows 11 taskbar.</value></data>
+	<data name="AboutLicense" xml:space="preserve"><value>GPL-3.0 · Copyright © 2026 Dmytro Bezotosnyi</value></data>
+	<data name="AboutRepository" xml:space="preserve"><value>github.com/bezotosnyi/TaskbarIconOverlay</value></data>
+	<data name="Close" xml:space="preserve"><value>Close</value></data>
 
 	<data name="LangEnglish" xml:space="preserve"><value>English</value></data>
 	<data name="LangUkrainian" xml:space="preserve"><value>Українська</value></data>

@@ -14,5 +14,6 @@ public sealed class AppSettings
     public string NumberColorHex { get; set; } = "#FFFFFFFF";
     public string BackgroundColorHex { get; set; } = "#80000000";
     public bool ShowOnAllTaskbars { get; set; }
+    public bool CheckForUpdatesAutomatically { get; set; } = true;
     public AppLanguage Language { get; set; } = AppLanguage.English;
 }

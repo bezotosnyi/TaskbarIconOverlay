@@ -32,6 +32,9 @@ $PublishDir   = Join-Path $ArtifactsDir "publish"
 $StageDir     = Join-Path $PublishDir "TaskbarIconOverlay-$Version"
 $ZipPath      = Join-Path $PublishDir "TaskbarIconOverlay-$Version.zip"
 $HashPath     = Join-Path $PublishDir "TaskbarIconOverlay-$Version.zip.sha256"
+$InstallerScript = Join-Path $RootDir "installer\TaskbarIconOverlay.iss"
+$InstallerPath   = Join-Path $PublishDir "TaskbarIconOverlay-Setup-x64.exe"
+$InstallerHashPath = "$InstallerPath.sha256"
 
 # -----------------------------------------------------------------------------
 # Helpers
@@ -110,6 +113,22 @@ function Find-DotNet {
     return $Command.Source
 }
 
+function Find-InnoSetupCompiler {
+    $Candidates = @(
+        "${env:ProgramFiles(x86)}\Inno Setup 7\ISCC.exe",
+        "$env:ProgramFiles\Inno Setup 7\ISCC.exe"
+    )
+
+    foreach ($Candidate in $Candidates) {
+        if (Test-Path -LiteralPath $Candidate) { return $Candidate }
+    }
+
+    $Command = Get-Command ISCC.exe -ErrorAction SilentlyContinue
+    if ($Command) { return $Command.Source }
+
+    throw "Inno Setup 7 was not found. Install it from https://jrsoftware.org/isdl.php."
+}
+
 function Find-ProjectFile {
     param(
         [Parameter(Mandatory = $true)]
@@ -136,6 +155,7 @@ function Find-ProjectFile {
 Write-Step "Validating repository"
 
 Assert-FileExists $Solution
+Assert-FileExists $InstallerScript
 
 if (-not (Test-Path -LiteralPath $RedistDir -PathType Container)) {
     throw "redist directory not found: $RedistDir"
@@ -143,9 +163,11 @@ if (-not (Test-Path -LiteralPath $RedistDir -PathType Container)) {
 
 $MSBuild = Find-MSBuild
 $DotNet  = Find-DotNet
+$ISCC    = Find-InnoSetupCompiler
 
 Write-Host "MSBuild: $MSBuild"
 Write-Host "dotnet:  $DotNet"
+Write-Host "ISCC:    $ISCC"
 Write-Host "Version: $Version"
 
 # -----------------------------------------------------------------------------
@@ -373,6 +395,19 @@ Compress-Archive `
 Assert-FileExists $ZipPath
 
 # -----------------------------------------------------------------------------
+# Create installer
+# -----------------------------------------------------------------------------
+
+Write-Step "Creating installer"
+
+& $ISCC "/DMyAppVersion=$Version" $InstallerScript
+if ($LASTEXITCODE -ne 0) {
+    throw "Inno Setup compilation failed with exit code $LASTEXITCODE."
+}
+
+Assert-FileExists $InstallerPath
+
+# -----------------------------------------------------------------------------
 # SHA-256
 # -----------------------------------------------------------------------------
 
@@ -384,7 +419,13 @@ $Hash | Set-Content `
     -LiteralPath $HashPath `
     -Encoding ASCII
 
+$InstallerHash = (Get-FileHash -LiteralPath $InstallerPath -Algorithm SHA256).Hash
+$InstallerHash | Set-Content `
+    -LiteralPath $InstallerHashPath `
+    -Encoding ASCII
+
 Write-Host "SHA256: $Hash"
+Write-Host "Installer SHA256: $InstallerHash"
 
 # -----------------------------------------------------------------------------
 # Summary
@@ -398,4 +439,6 @@ Write-Host ""
 Write-Host "Version : $Version"
 Write-Host "Package : $ZipPath"
 Write-Host "SHA256  : $HashPath"
+Write-Host "Installer: $InstallerPath"
+Write-Host "Installer SHA256: $InstallerHashPath"
 Write-Host ""

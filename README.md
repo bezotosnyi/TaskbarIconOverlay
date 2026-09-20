@@ -97,7 +97,7 @@ scripts/                  Build and deployment scripts
 
 ## Known limitations
 
-- No installer and updater yet - currently distributed as a portable ZIP package.
+- Releases include both a portable ZIP and an x64 Inno Setup installer. The app checks GitHub Releases for updates when enabled in **Settings**; **Help > Check for updates** performs a manual check.
 - Real-time config propagation from the WPF app to the native mod (over a memory-mapped file) is functional but still being hardened against edge cases.
 - Hooks into Explorer's internal taskbar rendering; expect breakage on some future Windows updates until symbols/hooks are updated accordingly.
 - `redist/` bundles renamed Microsoft DIA/SymSrv binaries for symbol resolution - their redistribution terms haven't been independently verified yet.

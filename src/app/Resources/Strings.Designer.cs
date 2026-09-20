@@ -61,6 +61,33 @@ namespace TaskbarIconOverlay.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Full-size, per-window icon overlays and shortcut numbering for the Windows 11 taskbar..
+        /// </summary>
+        internal static string AboutDescription {
+            get {
+                return ResourceManager.GetString("AboutDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to GPL-3.0 · Copyright © 2026 Dmytro Bezotosnyi.
+        /// </summary>
+        internal static string AboutLicense {
+            get {
+                return ResourceManager.GetString("AboutLicense", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to github.com/bezotosnyi/TaskbarIconOverlay.
+        /// </summary>
+        internal static string AboutRepository {
+            get {
+                return ResourceManager.GetString("AboutRepository", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to + Add slot.
         /// </summary>
         internal static string AddSlot {
@@ -93,6 +120,105 @@ namespace TaskbarIconOverlay.App.Resources {
         internal static string BrowseIcon {
             get {
                 return ResourceManager.GetString("BrowseIcon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Check for updates.
+        /// </summary>
+        internal static string CheckForUpdates {
+            get {
+                return ResourceManager.GetString("CheckForUpdates", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Check for updates automatically.
+        /// </summary>
+        internal static string CheckForUpdatesAutomatically {
+            get {
+                return ResourceManager.GetString("CheckForUpdatesAutomatically", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Close.
+        /// </summary>
+        internal static string Close {
+            get {
+                return ResourceManager.GetString("Close", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Engine.dll could not be found next to injector.exe..
+        /// </summary>
+        internal static string EngineDllNotFound {
+            get {
+                return ResourceManager.GetString("EngineDllNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not find explorer.exe..
+        /// </summary>
+        internal static string EngineExplorerNotFound {
+            get {
+                return ResourceManager.GetString("EngineExplorerNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to inject the engine into explorer.exe..
+        /// </summary>
+        internal static string EngineInjectionFailed {
+            get {
+                return ResourceManager.GetString("EngineInjectionFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not open explorer.exe..
+        /// </summary>
+        internal static string EngineOpenProcessFailed {
+            get {
+                return ResourceManager.GetString("EngineOpenProcessFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to shut down the engine in explorer.exe..
+        /// </summary>
+        internal static string EngineRemoteExportCallFailed {
+            get {
+                return ResourceManager.GetString("EngineRemoteExportCallFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An unexpected engine error occurred. Please check the log file for more details..
+        /// </summary>
+        internal static string EngineUnknownError {
+            get {
+                return ResourceManager.GetString("EngineUnknownError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The engine injector was called with an invalid command..
+        /// </summary>
+        internal static string EngineUsageError {
+            get {
+                return ResourceManager.GetString("EngineUsageError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Another Windhawk instance is already running in explorer.exe..
+        /// </summary>
+        internal static string EngineWindhawkConflict {
+            get {
+                return ResourceManager.GetString("EngineWindhawkConflict", resourceCulture);
             }
         }
         
@@ -133,6 +259,15 @@ namespace TaskbarIconOverlay.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to About.
+        /// </summary>
+        internal static string MenuAbout {
+            get {
+                return ResourceManager.GetString("MenuAbout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Exit.
         /// </summary>
         internal static string MenuExit {
@@ -151,6 +286,15 @@ namespace TaskbarIconOverlay.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to _Help.
+        /// </summary>
+        internal static string MenuHelp {
+            get {
+                return ResourceManager.GetString("MenuHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Language.
         /// </summary>
         internal static string MenuLanguage {
@@ -160,29 +304,11 @@ namespace TaskbarIconOverlay.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Theme.
+        ///   Looks up a localized string similar to _Settings.
         /// </summary>
-        internal static string MenuTheme {
+        internal static string MenuSettings {
             get {
-                return ResourceManager.GetString("MenuTheme", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Dark.
-        /// </summary>
-        internal static string MenuThemeDark {
-            get {
-                return ResourceManager.GetString("MenuThemeDark", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Light.
-        /// </summary>
-        internal static string MenuThemeLight {
-            get {
-                return ResourceManager.GetString("MenuThemeLight", resourceCulture);
+                return ResourceManager.GetString("MenuSettings", resourceCulture);
             }
         }
         
@@ -273,6 +399,15 @@ namespace TaskbarIconOverlay.App.Resources {
         internal static string ShowOnAllTaskbars {
             get {
                 return ResourceManager.GetString("ShowOnAllTaskbars", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Initializing....
+        /// </summary>
+        internal static string SplashInitializing {
+            get {
+                return ResourceManager.GetString("SplashInitializing", resourceCulture);
             }
         }
         
@@ -376,7 +511,52 @@ namespace TaskbarIconOverlay.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to TaskbarIconOverlay - taskbar icon overlays.
+        ///   Looks up a localized string similar to Version {0} is available. Download and install it now?.
+        /// </summary>
+        internal static string UpdateAvailable {
+            get {
+                return ResourceManager.GetString("UpdateAvailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not check for updates. Please try again later..
+        /// </summary>
+        internal static string UpdateFailed {
+            get {
+                return ResourceManager.GetString("UpdateFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Download and install.
+        /// </summary>
+        internal static string UpdateInstall {
+            get {
+                return ResourceManager.GetString("UpdateInstall", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Later.
+        /// </summary>
+        internal static string UpdateLater {
+            get {
+                return ResourceManager.GetString("UpdateLater", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You are using the latest version..
+        /// </summary>
+        internal static string UpdateNone {
+            get {
+                return ResourceManager.GetString("UpdateNone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Taskbar icon overlays.
         /// </summary>
         internal static string WindowTitle {
             get {

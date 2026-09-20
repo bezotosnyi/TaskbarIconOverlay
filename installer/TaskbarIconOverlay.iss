@@ -12,7 +12,6 @@ AppName={#MyAppName}
 AppVersion={#MyAppVersion}
 AppPublisher=Dmytro Bezotosnyi
 DefaultDirName={autopf}\{#MyAppName}
-DefaultGroupName={#MyAppName}
 DisableProgramGroupPage=yes
 OutputDir=..\artifacts\publish
 OutputBaseFilename=TaskbarIconOverlay-Setup-x64
@@ -27,16 +26,20 @@ RestartApplications=no
 UninstallDisplayIcon={app}\{#MyAppExeName}
 SetupIconFile=..\src\app\Assets\AppIcon.ico
 
+[CustomMessages]
+CreateStartMenuIcon=Create a &Start Menu shortcut
+
 [Tasks]
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
+Name: "startmenuicon"; Description: "{cm:CreateStartMenuIcon}"; GroupDescription: "{cm:AdditionalIcons}"
 
 [Files]
 Source: "..\artifacts\publish\TaskbarIconOverlay-{#MyAppVersion}\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 [Icons]
 Name: "{autostartup}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
-Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
-Name: "{group}\Uninstall {#MyAppName}"; Filename: "{uninstallexe}"
+Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
+Name: "{autoprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: startmenuicon
 
 [Run]
 Filename: "{app}\{#MyAppExeName}"; Description: "Launch {#MyAppName}"; Flags: nowait postinstall skipifsilent

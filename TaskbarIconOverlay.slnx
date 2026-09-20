@@ -6,6 +6,9 @@
   <Folder Name="/docs/images/">
     <File Path="docs/images/taskbar-icon-overlay.png" />
   </Folder>
+  <Folder Name="/installer/">
+    <File Path="installer/TaskbarIconOverlay.iss" />
+  </Folder>
   <Folder Name="/scripts/">
     <File Path="scripts/deploy_redist.bat" />
     <File Path="scripts/fetch-third-party-mods.ps1" />

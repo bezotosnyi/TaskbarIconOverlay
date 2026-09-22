@@ -33,6 +33,33 @@ public partial class App : Application
         Logger.Initialize();
         try
         {
+            var splash = new SplashWindow();
+            var dialogSettings = new MetroDialogSettings()
+            {
+                DialogTitleFontSize = 16,
+                DialogMessageFontSize = 14,
+                DialogButtonFontSize = 14,
+                AnimateShow = true,
+                AnimateHide = true
+            };
+
+            if (!IsWindows11())
+            {
+                splash.Show();
+
+                var message = LocalizationManager.Instance["Windows10NotSupported"];
+                
+                await splash.ShowMessageAsync(
+                    LocalizationManager.Instance["WindowTitle"],
+                    message, MessageDialogStyle.Affirmative, dialogSettings);
+
+                Logger.Error(message);
+
+                splash.Close();
+                Shutdown();
+                return;
+            }
+
             _instanceMutex = new Mutex(
                 initiallyOwned: true,
                 name: InstanceMutexName,
@@ -59,7 +86,6 @@ public partial class App : Application
                 LocalizationManager.Instance.SetLanguage(settings.Language);
             }
 
-            var splash = new SplashWindow();
             splash.Show();
 
             var result = await _engineController.EnableAsync();
@@ -69,14 +95,6 @@ public partial class App : Application
                     result.GetLocalizationKey()
                 ];
 
-                var dialogSettings = new MetroDialogSettings()
-                {
-                    DialogTitleFontSize = 16,
-                    DialogMessageFontSize = 14,
-                    DialogButtonFontSize = 14,
-                    AnimateShow = true,
-                    AnimateHide = true
-                };
                 await splash.ShowMessageAsync(
                     LocalizationManager.Instance["WindowTitle"],
                     message, MessageDialogStyle.Affirmative, dialogSettings);
@@ -91,7 +109,8 @@ public partial class App : Application
             splash.Close();
 
             var fileDialogService = new FileDialogService();
-            _mainViewModel = new MainViewModel(fileDialogService, _configWriter, new Services.Updates.UpdateService(), settings);
+            _mainViewModel = new MainViewModel(fileDialogService, _configWriter, new Services.Updates.UpdateService(),
+                settings);
 
             var window = new MainWindow { DataContext = _mainViewModel };
             _trayIconManager = new TrayIconManager(window);
@@ -144,7 +163,8 @@ public partial class App : Application
                 var result = await _engineController.DisableAsync();
                 if (result != EngineResult.Disabled)
                 {
-                    Logger.Error($"Failed to disable the engine: {LocalizationManager.Instance[result.GetLocalizationKey()]}");
+                    Logger.Error(
+                        $"Failed to disable the engine: {LocalizationManager.Instance[result.GetLocalizationKey()]}");
                 }
             }
         }
@@ -155,4 +175,6 @@ public partial class App : Application
             _instanceMutex?.Dispose();
         }
     }
+
+    private static bool IsWindows11() => OperatingSystem.IsWindowsVersionAtLeast(10, 0, 22000);
 }

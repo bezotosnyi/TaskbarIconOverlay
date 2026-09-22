@@ -167,4 +167,5 @@
 	<data name="EngineUsageError" xml:space="preserve"><value>Инжектор движка был запущен с некорректной командой.</value></data>
 	<data name="EngineUnknownError" xml:space="preserve"><value>Произошла непредвиденная ошибка движка. Проверьте файл журнала для получения дополнительной информации.</value></data>
 
+	<data name="Windows10NotSupported" xml:space="preserve"><value>Windows 10 пока не поддерживается. Поддержка находится в разработке и будет доступна в одном из следующих обновлений.</value></data>
 </root>

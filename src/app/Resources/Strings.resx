@@ -167,4 +167,5 @@
 	<data name="EngineUsageError" xml:space="preserve"><value>The engine injector was called with an invalid command.</value></data>
 	<data name="EngineUnknownError" xml:space="preserve"><value>An unexpected engine error occurred. Please check the log file for more details.</value></data>
 
+	<data name="Windows10NotSupported" xml:space="preserve"><value>Windows 10 is not supported yet. Support is currently in development and will be available in a future release.</value></data>
 </root>

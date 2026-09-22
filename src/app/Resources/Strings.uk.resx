@@ -167,4 +167,5 @@
 	<data name="EngineUsageError" xml:space="preserve"><value>Інжектор рушія було запущено з некоректною командою.</value></data>
 	<data name="EngineUnknownError" xml:space="preserve"><value>Виникла непередбачена помилка рушія. Перевірте файл журналу для отримання додаткової інформації.</value></data>
 
+	<data name="Windows10NotSupported" xml:space="preserve"><value>Windows 10 наразі не підтримується. Підтримка зараз у розробці та буде доступна в одному з наступних оновлень.</value></data>
 </root>

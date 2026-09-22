@@ -15,15 +15,18 @@
     <File Path="scripts/fetch-windhawk-headers.ps1" />
     <File Path="scripts/publish.bat" />
     <File Path="scripts/publish.ps1" />
+    <File Path="scripts/set-version.ps1" />
   </Folder>
   <Folder Name="/Solution Items/">
     <File Path=".gitattributes" />
     <File Path=".gitignore" />
     <File Path="Directory.Build.props" />
+    <File Path="Directory.Build.Version.props" />
     <File Path="LICENSE" />
     <File Path="README.md" />
     <File Path="vcpkg-configuration.json" />
     <File Path="vcpkg.json" />
+    <File Path="version.h" />
   </Folder>
   <Folder Name="/src/" />
   <Folder Name="/src/app/">

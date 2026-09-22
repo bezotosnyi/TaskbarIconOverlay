@@ -1,4 +1,6 @@
 <Project>
+  <Import Project="$(MSBuildThisFileDirectory)Directory.Build.Version.props" />
+
   <PropertyGroup>
     <!-- Centralized clean locations -->
     <OutDir>$(MSBuildThisFileDirectory)artifacts\bin\$(Configuration)\</OutDir>

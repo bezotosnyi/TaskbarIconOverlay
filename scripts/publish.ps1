@@ -1,7 +1,8 @@
 [CmdletBinding()]
 param(
-    [Parameter(Mandatory = $false)]
-    [string]$Version = "0.1.0",
+    [Parameter(Mandatory = $true)]
+    [ValidatePattern('^\d+\.\d+\.\d+$')]
+    [string]$Version,
 
     [Parameter(Mandatory = $false)]
     [ValidateSet("Release")]
@@ -147,6 +148,13 @@ function Find-ProjectFile {
 
     return $Project.FullName
 }
+
+# -----------------------------------------------------------------------------
+# Set release version
+# -----------------------------------------------------------------------------
+
+Write-Step "Setting version to $Version"
+& "$ScriptDir\set-version.ps1" -Version $Version
 
 # -----------------------------------------------------------------------------
 # Validate repository

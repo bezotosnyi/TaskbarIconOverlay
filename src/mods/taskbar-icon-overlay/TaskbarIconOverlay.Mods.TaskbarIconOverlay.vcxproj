@@ -12,8 +12,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="core\app_connection.cpp" />
+    <ClCompile Include="core\icon_catalog.cpp" />
+    <ClCompile Include="core\overlay_settings.cpp" />
+    <ClCompile Include="platform\win11\win11_visual_tree.cpp" />
     <ClCompile Include="mod_api.cpp" />
     <ClCompile Include="taskbar-icon-overlay.wh.cpp" />
+    <ClCompile Include="platform\win11\win11_backend.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\shared\logger\TaskbarIconOverlay.Logger.vcxproj">
@@ -25,6 +30,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
+    <ClInclude Include="core\app_connection.h" />
+    <ClInclude Include="core\icon_catalog.h" />
+    <ClInclude Include="core\overlay_settings.h" />
+    <ClInclude Include="platform\win11\win11_visual_tree.h" />
+    <ClInclude Include="core\shared_config.h" />
+    <ClInclude Include="core\taskbar_backend.h" />
+    <ClInclude Include="platform\win11\win11_backend.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="TaskbarIconOverlay.Mods.TaskbarIconOverlay.rc" />

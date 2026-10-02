@@ -16,6 +16,7 @@
     <ClCompile Include="core\icon_catalog.cpp" />
     <ClCompile Include="core\overlay_settings.cpp" />
     <ClCompile Include="platform\win11\win11_visual_tree.cpp" />
+    <ClCompile Include="platform\win11\win11_icon_cache.cpp" />
     <ClCompile Include="mod_api.cpp" />
     <ClCompile Include="taskbar-icon-overlay.wh.cpp" />
     <ClCompile Include="platform\win11\win11_backend.cpp" />
@@ -34,6 +35,7 @@
     <ClInclude Include="core\icon_catalog.h" />
     <ClInclude Include="core\overlay_settings.h" />
     <ClInclude Include="platform\win11\win11_visual_tree.h" />
+    <ClInclude Include="platform\win11\win11_icon_cache.h" />
     <ClInclude Include="core\shared_config.h" />
     <ClInclude Include="core\taskbar_backend.h" />
     <ClInclude Include="platform\win11\win11_backend.h" />

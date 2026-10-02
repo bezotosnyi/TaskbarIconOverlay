@@ -2,8 +2,8 @@
 
 #include "../../core/shared_config.h"
 #include "../../core/app_connection.h"
-#include "../../core/icon_catalog.h"
 #include "../../core/overlay_settings.h"
+#include "win11_icon_cache.h"
 #include "win11_visual_tree.h"
 #include "win11_backend.h"
 
@@ -294,7 +294,7 @@ FrameworkElement CreateIconContainer(int number) {
     try {
         Grid iconContainer;
 
-        BitmapImage bitmap = IconCatalog::Get(number);
+        BitmapImage bitmap = Win11IconCache::Get(number);
         if (!bitmap) {
             return nullptr;
         }

@@ -2,13 +2,14 @@
 
 #include "shared_config.h"
 
-#include <winrt/Windows.UI.Xaml.Media.Imaging.h>
+#include <string>
 
 namespace IconCatalog
 {
     // Replaces the catalog atomically from the current shared-memory snapshot.
     void Reload(const SharedConfig::Layout& config);
 
-    // Returns a cached BitmapImage for an assigned taskbar position, or null.
-    winrt::Windows::UI::Xaml::Media::Imaging::BitmapImage Get(int position);
+    // Returns the configured icon path for an assigned taskbar position.
+    // An empty string means that no custom icon is configured for that position.
+    std::wstring GetPath(int position);
 } // namespace IconCatalog

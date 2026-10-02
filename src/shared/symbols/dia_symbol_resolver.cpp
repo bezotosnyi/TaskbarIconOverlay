@@ -323,7 +323,15 @@ std::unordered_map<std::wstring, void*> DiaSymbolResolver::FindSymbols(
         return results; // failure already logged inside DiaSession's constructor
     }
 
-    constexpr enum SymTagEnum tags[] = {SymTagPublicSymbol, SymTagFunction, SymTagData};
+    // Private non-virtual methods can be emitted as labels in public PDBs.
+    // For example, Windows 10's CTaskBtnGroup::_DrawRegularButton is a
+    // SymTagLabel, despite being a callable function in explorer.exe.
+    constexpr enum SymTagEnum tags[] = {
+        SymTagPublicSymbol,
+        SymTagFunction,
+        SymTagData,
+        SymTagLabel,
+    };
     for (enum SymTagEnum tag : tags)
     {
         if (pending.empty()) break; // everything already found - skip remaining tags

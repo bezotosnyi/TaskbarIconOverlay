@@ -14,6 +14,7 @@
     <ClCompile Include="core\overlay_settings.cpp"><Filter>core</Filter></ClCompile>
     <ClCompile Include="platform\win11\win11_backend.cpp"><Filter>platform\win11</Filter></ClCompile>
     <ClCompile Include="platform\win11\win11_visual_tree.cpp"><Filter>platform\win11</Filter></ClCompile>
+    <ClCompile Include="platform\win11\win11_icon_cache.cpp"><Filter>platform\win11</Filter></ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -24,6 +25,7 @@
     <ClInclude Include="core\taskbar_backend.h"><Filter>core</Filter></ClInclude>
     <ClInclude Include="platform\win11\win11_backend.h"><Filter>platform\win11</Filter></ClInclude>
     <ClInclude Include="platform\win11\win11_visual_tree.h"><Filter>platform\win11</Filter></ClInclude>
+    <ClInclude Include="platform\win11\win11_icon_cache.h"><Filter>platform\win11</Filter></ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="TaskbarIconOverlay.Mods.TaskbarIconOverlay.rc" />

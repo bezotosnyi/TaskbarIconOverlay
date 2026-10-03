@@ -41,23 +41,23 @@ Adds configurable icon and number overlays to taskbar buttons.
 */
 // ==/WindhawkModSettings==
 
-#include "platform/win11/win11_backend.h"
+#include "platform/taskbar_backend_selector.h"
 
 // This file is deliberately limited to Windhawk metadata and lifecycle
 // dispatch. Platform-specific taskbar code belongs to a backend.
 BOOL Wh_ModInit()
 {
-    return GetWin11Backend().Initialize();
+    return GetTaskbarBackend().Initialize();
 }
 
 void Wh_ModAfterInit()
 {
-    GetWin11Backend().AfterInitialize();
+    GetTaskbarBackend().AfterInitialize();
 }
 
 void Wh_ModBeforeUninit()
 {
-    GetWin11Backend().BeforeUninitialize();
+    GetTaskbarBackend().BeforeUninitialize();
 }
 
 void Wh_ModUninit()
@@ -66,5 +66,5 @@ void Wh_ModUninit()
 
 void Wh_ModSettingsChanged()
 {
-    GetWin11Backend().SettingsChanged();
+    GetTaskbarBackend().SettingsChanged();
 }

@@ -18,6 +18,7 @@
     <ClCompile Include="platform\win11\win11_visual_tree.cpp" />
     <ClCompile Include="platform\win11\win11_icon_cache.cpp" />
     <ClCompile Include="platform\win10\win10_backend.cpp" />
+    <ClCompile Include="platform\taskbar_backend_selector.cpp" />
     <ClCompile Include="mod_api.cpp" />
     <ClCompile Include="taskbar-icon-overlay.wh.cpp" />
     <ClCompile Include="platform\win11\win11_backend.cpp" />
@@ -38,6 +39,7 @@
     <ClInclude Include="platform\win11\win11_visual_tree.h" />
     <ClInclude Include="platform\win11\win11_icon_cache.h" />
     <ClInclude Include="platform\win10\win10_backend.h" />
+    <ClInclude Include="platform\taskbar_backend_selector.h" />
     <ClInclude Include="core\shared_config.h" />
     <ClInclude Include="core\taskbar_backend.h" />
     <ClInclude Include="platform\win11\win11_backend.h" />

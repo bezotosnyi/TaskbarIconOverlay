@@ -19,6 +19,8 @@
     <ClCompile Include="platform\win11\win11_visual_tree.cpp" />
     <ClCompile Include="platform\win11\win11_icon_cache.cpp" />
     <ClCompile Include="platform\win10\win10_backend.cpp" />
+    <ClCompile Include="platform\win10\win10_button_tracker.cpp" />
+    <ClCompile Include="platform\win10\win10_overlay_renderer.cpp" />
     <ClCompile Include="platform\win10\win10_taskbar_hook.cpp" />
     <ClCompile Include="platform\taskbar_backend_selector.cpp" />
     <ClCompile Include="mod_api.cpp" />
@@ -42,6 +44,8 @@
     <ClInclude Include="platform\win11\win11_visual_tree.h" />
     <ClInclude Include="platform\win11\win11_icon_cache.h" />
     <ClInclude Include="platform\win10\win10_backend.h" />
+    <ClInclude Include="platform\win10\win10_button_tracker.h" />
+    <ClInclude Include="platform\win10\win10_overlay_renderer.h" />
     <ClInclude Include="platform\win10\win10_taskbar_hook.h" />
     <ClInclude Include="platform\taskbar_backend_selector.h" />
     <ClInclude Include="core\shared_config.h" />
@@ -118,7 +122,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
-      <AdditionalDependencies>ole32.lib;oleaut32.lib;runtimeobject.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>ole32.lib;oleaut32.lib;runtimeobject.lib;gdiplus.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Manifest>
       <EnableSegmentHeap>true</EnableSegmentHeap>
@@ -147,7 +151,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
-      <AdditionalDependencies>ole32.lib;oleaut32.lib;runtimeobject.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>ole32.lib;oleaut32.lib;runtimeobject.lib;gdiplus.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Manifest>
       <EnableSegmentHeap>true</EnableSegmentHeap>

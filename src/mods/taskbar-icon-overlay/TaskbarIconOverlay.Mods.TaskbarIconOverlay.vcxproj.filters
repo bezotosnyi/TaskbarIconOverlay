@@ -18,6 +18,8 @@
     <ClCompile Include="platform\win11\win11_visual_tree.cpp"><Filter>platform\win11</Filter></ClCompile>
     <ClCompile Include="platform\win11\win11_icon_cache.cpp"><Filter>platform\win11</Filter></ClCompile>
     <ClCompile Include="platform\win10\win10_backend.cpp"><Filter>platform\win10</Filter></ClCompile>
+    <ClCompile Include="platform\win10\win10_button_tracker.cpp"><Filter>platform\win10</Filter></ClCompile>
+    <ClCompile Include="platform\win10\win10_overlay_renderer.cpp"><Filter>platform\win10</Filter></ClCompile>
     <ClCompile Include="platform\win10\win10_taskbar_hook.cpp"><Filter>platform\win10</Filter></ClCompile>
     <ClCompile Include="platform\taskbar_backend_selector.cpp"><Filter>platform</Filter></ClCompile>
   </ItemGroup>
@@ -33,6 +35,8 @@
     <ClInclude Include="platform\win11\win11_visual_tree.h"><Filter>platform\win11</Filter></ClInclude>
     <ClInclude Include="platform\win11\win11_icon_cache.h"><Filter>platform\win11</Filter></ClInclude>
     <ClInclude Include="platform\win10\win10_backend.h"><Filter>platform\win10</Filter></ClInclude>
+    <ClInclude Include="platform\win10\win10_button_tracker.h"><Filter>platform\win10</Filter></ClInclude>
+    <ClInclude Include="platform\win10\win10_overlay_renderer.h"><Filter>platform\win10</Filter></ClInclude>
     <ClInclude Include="platform\win10\win10_taskbar_hook.h"><Filter>platform\win10</Filter></ClInclude>
     <ClInclude Include="platform\taskbar_backend_selector.h"><Filter>platform</Filter></ClInclude>
   </ItemGroup>

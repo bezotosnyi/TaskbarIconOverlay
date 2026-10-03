@@ -80,6 +80,21 @@ namespace Win10ButtonTracker
             return;
 
         std::lock_guard lock(g_mutex);
+        // When Explorer removes a button, the following button eventually
+        // occupies the exact same final rect. Retaining both would leave a
+        // phantom position in the tracker. A live button cannot keep that
+        // rect, so replace its stale occupant.
+        const auto collision = std::find_if(g_buttons.begin(), g_buttons.end(),
+            [taskButtonGroup, &buttonRect](const auto& entry) {
+                return entry.first != taskButtonGroup && AreEqual(entry.second.rect, buttonRect);
+            });
+        if (collision != g_buttons.end())
+        {
+            Wh_Log(L"Win10 button tracker: replacing stale group=%p at rect=[%ld,%ld,%ld,%ld]",
+                collision->first, buttonRect.left, buttonRect.top, buttonRect.right, buttonRect.bottom);
+            g_buttons.erase(collision);
+        }
+
         auto [it, inserted] = g_buttons.try_emplace(taskButtonGroup, ObservedButton{ buttonRect });
         if (!inserted && AreEqual(it->second.rect, buttonRect))
             return;

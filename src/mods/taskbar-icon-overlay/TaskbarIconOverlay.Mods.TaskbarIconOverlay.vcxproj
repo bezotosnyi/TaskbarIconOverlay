@@ -12,8 +12,20 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="core\app_connection.cpp" />
+    <ClCompile Include="core\icon_catalog.cpp" />
+    <ClCompile Include="core\overlay_settings.cpp" />
+    <ClCompile Include="core\overlay_configuration.cpp" />
+    <ClCompile Include="platform\win11\win11_visual_tree.cpp" />
+    <ClCompile Include="platform\win11\win11_icon_cache.cpp" />
+    <ClCompile Include="platform\win10\win10_backend.cpp" />
+    <ClCompile Include="platform\win10\win10_button_tracker.cpp" />
+    <ClCompile Include="platform\win10\win10_overlay_renderer.cpp" />
+    <ClCompile Include="platform\win10\win10_taskbar_hook.cpp" />
+    <ClCompile Include="platform\taskbar_backend_selector.cpp" />
     <ClCompile Include="mod_api.cpp" />
     <ClCompile Include="taskbar-icon-overlay.wh.cpp" />
+    <ClCompile Include="platform\win11\win11_backend.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\shared\logger\TaskbarIconOverlay.Logger.vcxproj">
@@ -25,6 +37,20 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
+    <ClInclude Include="core\app_connection.h" />
+    <ClInclude Include="core\icon_catalog.h" />
+    <ClInclude Include="core\overlay_settings.h" />
+    <ClInclude Include="core\overlay_configuration.h" />
+    <ClInclude Include="platform\win11\win11_visual_tree.h" />
+    <ClInclude Include="platform\win11\win11_icon_cache.h" />
+    <ClInclude Include="platform\win10\win10_backend.h" />
+    <ClInclude Include="platform\win10\win10_button_tracker.h" />
+    <ClInclude Include="platform\win10\win10_overlay_renderer.h" />
+    <ClInclude Include="platform\win10\win10_taskbar_hook.h" />
+    <ClInclude Include="platform\taskbar_backend_selector.h" />
+    <ClInclude Include="core\shared_config.h" />
+    <ClInclude Include="core\taskbar_backend.h" />
+    <ClInclude Include="platform\win11\win11_backend.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="TaskbarIconOverlay.Mods.TaskbarIconOverlay.rc" />
@@ -89,14 +115,14 @@
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(SolutionDir)src\mods\wrapper\include;$(SolutionDir)src\mods\shared;$(SolutionDir)src\shared\logger;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(SolutionDir)src\mods\wrapper\include;$(SolutionDir)src\mods\shared;$(SolutionDir)src\shared\logger;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4996;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
-      <AdditionalDependencies>ole32.lib;oleaut32.lib;runtimeobject.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>ole32.lib;oleaut32.lib;runtimeobject.lib;gdiplus.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Manifest>
       <EnableSegmentHeap>true</EnableSegmentHeap>
@@ -118,14 +144,14 @@
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(SolutionDir)src\mods\wrapper\include;$(SolutionDir)src\mods\shared;$(SolutionDir)src\shared\logger;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(SolutionDir)src\mods\wrapper\include;$(SolutionDir)src\mods\shared;$(SolutionDir)src\shared\logger;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4996;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
-      <AdditionalDependencies>ole32.lib;oleaut32.lib;runtimeobject.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>ole32.lib;oleaut32.lib;runtimeobject.lib;gdiplus.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Manifest>
       <EnableSegmentHeap>true</EnableSegmentHeap>

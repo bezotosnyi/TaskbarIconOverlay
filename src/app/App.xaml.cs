@@ -43,7 +43,7 @@ public partial class App : Application
                 AnimateHide = true
             };
 
-            if (!IsWindows11())
+            if (!IsSupportedWindowsVersion())
             {
                 splash.Show();
 
@@ -176,5 +176,7 @@ public partial class App : Application
         }
     }
 
-    private static bool IsWindows11() => OperatingSystem.IsWindowsVersionAtLeast(10, 0, 22000);
+    // The injected module selects its implementation by Explorer's actual OS
+    // build. The desktop app itself supports both Windows 10 and Windows 11.
+    private static bool IsSupportedWindowsVersion() => OperatingSystem.IsWindowsVersionAtLeast(10, 0);
 }

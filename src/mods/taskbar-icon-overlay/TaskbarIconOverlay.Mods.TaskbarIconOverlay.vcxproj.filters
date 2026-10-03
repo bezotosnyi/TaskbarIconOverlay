@@ -4,6 +4,7 @@
     <Filter Include="core"><UniqueIdentifier>{1B2A5C49-19E0-4B47-B30C-2A966E1198D0}</UniqueIdentifier></Filter>
     <Filter Include="platform"><UniqueIdentifier>{D8867FB7-BCC4-4C59-9BEB-BDE3AD147557}</UniqueIdentifier></Filter>
     <Filter Include="platform\win11"><UniqueIdentifier>{893286A7-9D83-4A71-9B12-FC5A12A3A5D5}</UniqueIdentifier></Filter>
+    <Filter Include="platform\win10"><UniqueIdentifier>{5A69DC37-01ED-469E-BF59-A83D7CBBBD9C}</UniqueIdentifier></Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="taskbar-icon-overlay.wh.cpp" />
@@ -15,6 +16,7 @@
     <ClCompile Include="platform\win11\win11_backend.cpp"><Filter>platform\win11</Filter></ClCompile>
     <ClCompile Include="platform\win11\win11_visual_tree.cpp"><Filter>platform\win11</Filter></ClCompile>
     <ClCompile Include="platform\win11\win11_icon_cache.cpp"><Filter>platform\win11</Filter></ClCompile>
+    <ClCompile Include="platform\win10\win10_backend.cpp"><Filter>platform\win10</Filter></ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -26,6 +28,7 @@
     <ClInclude Include="platform\win11\win11_backend.h"><Filter>platform\win11</Filter></ClInclude>
     <ClInclude Include="platform\win11\win11_visual_tree.h"><Filter>platform\win11</Filter></ClInclude>
     <ClInclude Include="platform\win11\win11_icon_cache.h"><Filter>platform\win11</Filter></ClInclude>
+    <ClInclude Include="platform\win10\win10_backend.h"><Filter>platform\win10</Filter></ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="TaskbarIconOverlay.Mods.TaskbarIconOverlay.rc" />

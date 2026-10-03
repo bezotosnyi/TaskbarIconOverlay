@@ -1,11 +1,12 @@
 #include <windhawk_utils.h>
 
-#include "../../core/shared_config.h"
-#include "../../core/app_connection.h"
-#include "../../core/overlay_settings.h"
-#include "win11_icon_cache.h"
-#include "win11_visual_tree.h"
-#include "win11_backend.h"
+#include "core/shared_config.h"
+#include "core/app_connection.h"
+#include "core/icon_catalog.h"
+#include "core/overlay_settings.h"
+#include "platform/win11/win11_icon_cache.h"
+#include "platform/win11/win11_visual_tree.h"
+#include "platform/win11/win11_backend.h"
 
 #undef GetCurrentTime
 

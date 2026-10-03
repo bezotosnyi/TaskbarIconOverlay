@@ -1,6 +1,6 @@
-#include "win11_icon_cache.h"
+#include "platform/win11/win11_icon_cache.h"
 
-#include "../../core/icon_catalog.h"
+#include "core/icon_catalog.h"
 
 #include <winrt/Windows.Foundation.h>
 

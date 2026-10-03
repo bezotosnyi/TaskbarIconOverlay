@@ -1,4 +1,4 @@
-#include "icon_catalog.h"
+#include "core/icon_catalog.h"
 
 #include <algorithm>
 #include <mutex>

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "shared_config.h"
+#include "core/shared_config.h"
 
 #include <string>
 

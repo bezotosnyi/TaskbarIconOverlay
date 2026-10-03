@@ -1,5 +1,6 @@
 #include <windhawk_utils.h>
 
+#include "core/overlay_configuration.h"
 #include "platform/win10/win10_backend.h"
 
 namespace
@@ -45,6 +46,11 @@ namespace
     public:
         BOOL Initialize() override
         {
+            if (!OverlayConfiguration::Initialize(nullptr))
+            {
+                Wh_Log(L"Win10 backend: App configuration is unavailable; using Windhawk fallback settings");
+            }
+
             HMODULE explorerModule = GetModuleHandleW(nullptr);
             if (!explorerModule)
             {
@@ -77,10 +83,12 @@ namespace
 
         void BeforeUninitialize() override
         {
+            OverlayConfiguration::Shutdown();
         }
 
         void SettingsChanged() override
         {
+            OverlayConfiguration::ReloadWindhawkFallback();
         }
     };
 }

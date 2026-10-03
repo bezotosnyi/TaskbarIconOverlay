@@ -1,8 +1,6 @@
 #include <windhawk_utils.h>
 
-#include "core/shared_config.h"
-#include "core/app_connection.h"
-#include "core/icon_catalog.h"
+#include "core/overlay_configuration.h"
 #include "core/overlay_settings.h"
 #include "platform/win11/win11_icon_cache.h"
 #include "platform/win11/win11_visual_tree.h"
@@ -147,13 +145,8 @@ std::atomic<bool> g_unloading{ false };
 std::mutex g_overlayMutex;
 std::vector<RootEntry> g_trackedRoots;
 
-bool g_isAppConnected = false;
-SharedConfig::Layout g_fallbackConfig{};
-const SharedConfig::Layout* g_config = &g_fallbackConfig;
-
 // Forward declarations
 void ModSettingsChanged();
-void LoadExternalSettings();
 
 // Helper function to find button in vector
 auto FindButtonInVector = [](const std::vector<ButtonInformation>& buttons, const FrameworkElement& targetButton) {
@@ -243,14 +236,15 @@ void SetNumberPosition(Grid& textContainer) {
 }
 
 FrameworkElement CreateNumberContainer(int number) {
-    if ((g_config->allowNumbersBeyondTen && number >g_config->numberedCount) ||
-        number < 1 || number > g_config->numberedCount) {
+    const auto& config = OverlayConfiguration::Get();
+    if ((config.allowNumbersBeyondTen && number > config.numberedCount) ||
+        number < 1 || number > config.numberedCount) {
         Wh_Log(L"CreateNumberContainer: Invalid number %d, skipping creation", number);
         return nullptr;
     }
 
     try {
-        std::wstring text = (!g_config->allowNumbersBeyondTen && number == 10) ? L"0" : std::to_wstring(number);
+        std::wstring text = (!config.allowNumbersBeyondTen && number == 10) ? L"0" : std::to_wstring(number);
         auto textColor = ParseHexColor(OverlaySettings::Get().numberColor);
         auto strokeColor = ParseHexColor(OverlaySettings::Get().backgroundColor);
 
@@ -287,7 +281,8 @@ FrameworkElement CreateNumberContainer(int number) {
 }
 
 FrameworkElement CreateIconContainer(int number) {
-    if (number < 1 || number > g_config->windowCount) {
+    const auto& config = OverlayConfiguration::Get();
+    if (number < 1 || number > config.windowCount) {
         Wh_Log(L"CreateIconContainer: Invalid number %d, skipping creation", number);
         return nullptr;
     }
@@ -319,14 +314,15 @@ FrameworkElement CreateIconContainer(int number) {
 }
 
 CustomOverlay CreateCustomOverlay(int number, CustomOverlay oldOverlay) {
-    if (number < 1 || number > g_config->windowCount) {
+    const auto& config = OverlayConfiguration::Get();
+    if (number < 1 || number > config.windowCount) {
         Wh_Log(L"CreateCustomOverlay: Invalid number %d, skipping creation", number);
         return { nullptr, nullptr };
     }
 
     try {
         auto iconContainer =
-            oldOverlay.iconContainer && g_config->stickyIconBinding ? oldOverlay.iconContainer : CreateIconContainer(number);
+            oldOverlay.iconContainer && config.stickyIconBinding ? oldOverlay.iconContainer : CreateIconContainer(number);
 
         Wh_Log(L"CreateCustomOverlay: Created overlay with number %d", number);
 
@@ -440,21 +436,7 @@ void RemoveExistingOverlays(FrameworkElement iconPanel) {
 }
 
 bool IsEnabledByController() {
-    // Try to connect to the app if not already connected
-    if (!g_isAppConnected) {
-        Wh_Log(L"IsEnabledByController: Not connected to app, attempting to connect...");
-        g_isAppConnected = AppConnection::Connect(&ModSettingsChanged);
-
-        if (!g_isAppConnected) {
-            Wh_Log(L"IsEnabledByController: Failed to connect to app");
-            return false;
-        }
-        g_config = AppConnection::GetLayout();
-        LoadExternalSettings();
-        Wh_Log(L"IsEnabledByController: Successfully connected to app");
-    }
-
-    return g_isAppConnected && AppConnection::IsEnabled();
+    return OverlayConfiguration::IsEnabled();
 }
 
 void UpdateButtonOverlay(FrameworkElement button, int number) {
@@ -499,13 +481,14 @@ void UpdateButtonOverlay(FrameworkElement button, int number) {
             Wh_Log(L"UpdateButtonOverlay: New button, number %d", number);
         }
 
-        const bool shouldShow = number <= g_config->numberedCount;
+        const auto& config = OverlayConfiguration::Get();
+        const bool shouldShow = number <= config.numberedCount;
         const bool visibilityChanged = buttonInfo.isVisible != shouldShow;
         const bool numberChanged = buttonInfo.currentNumber != number;
         const bool needsNewOverlay = !buttonInfo.overlay.iconContainer ||
             !buttonInfo.overlay.textContainer ||
             (numberChanged && buttonInfo.overlay.iconContainer && buttonInfo.overlay.textContainer) ||
-            number == 10 && g_config->allowNumbersBeyondTen;
+            number == 10 && config.allowNumbersBeyondTen;
 
         if (!IsEnabledByController()) {
             Wh_Log(L"UpdateButtonOverlay: Is not enabled");
@@ -805,28 +788,10 @@ HMODULE WINAPI LoadLibraryExW_Hook(LPCWSTR lpLibFileName, HANDLE hFile, DWORD dw
     return module;
 }
 
-void LoadSettings() {
-    OverlaySettings::LoadWindhawkFallback();
-}
-
-void LoadExternalSettings() {
-    OverlaySettings::LoadExternal(*g_config);
-    IconCatalog::Reload(*g_config);
-}
-
 BOOL InitializeWin11Backend() {
-    g_isAppConnected = AppConnection::Connect(&ModSettingsChanged);
-
-    if (!g_isAppConnected) {
+    if (!OverlayConfiguration::Initialize(&ModSettingsChanged)) {
         Wh_Log(L"InitializeWin11Backend: Failed to connect to app, will attempt to connect later");
     }
-    else {
-        g_config = AppConnection::GetLayout();
-        LoadExternalSettings();
-    }
-
-    if (!g_isAppConnected)
-        LoadSettings();
 
     if (!HookTaskbarDllSymbols()) return FALSE;
 
@@ -852,21 +817,18 @@ void AfterInitializeWin11Backend() {
 
 void BeforeUninitializeWin11Backend() {
     g_unloading = true;
-    AppConnection::Disconnect();
-    g_isAppConnected = false;
-    g_config = &g_fallbackConfig;
+    OverlayConfiguration::Shutdown();
     RemoveAllNumberOverlays();
 }
 
 void Win11BackendSettingsChanged() {
     Wh_Log(L"Settings changed, clearing existing overlays");
-    LoadSettings();
+    OverlayConfiguration::ReloadWindhawkFallback();
     RemoveAllNumberOverlays();
 }
 
 void ModSettingsChanged() {
     Wh_Log(L"External settings changed, clearing existing overlays");
-    LoadExternalSettings();
     RemoveAllNumberOverlays();
 }
 

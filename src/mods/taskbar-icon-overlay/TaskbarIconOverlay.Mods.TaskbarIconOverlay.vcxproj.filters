@@ -13,6 +13,7 @@
     <ClCompile Include="core\app_connection.cpp"><Filter>core</Filter></ClCompile>
     <ClCompile Include="core\icon_catalog.cpp"><Filter>core</Filter></ClCompile>
     <ClCompile Include="core\overlay_settings.cpp"><Filter>core</Filter></ClCompile>
+    <ClCompile Include="core\overlay_configuration.cpp"><Filter>core</Filter></ClCompile>
     <ClCompile Include="platform\win11\win11_backend.cpp"><Filter>platform\win11</Filter></ClCompile>
     <ClCompile Include="platform\win11\win11_visual_tree.cpp"><Filter>platform\win11</Filter></ClCompile>
     <ClCompile Include="platform\win11\win11_icon_cache.cpp"><Filter>platform\win11</Filter></ClCompile>
@@ -24,6 +25,7 @@
     <ClInclude Include="core\app_connection.h"><Filter>core</Filter></ClInclude>
     <ClInclude Include="core\icon_catalog.h"><Filter>core</Filter></ClInclude>
     <ClInclude Include="core\overlay_settings.h"><Filter>core</Filter></ClInclude>
+    <ClInclude Include="core\overlay_configuration.h"><Filter>core</Filter></ClInclude>
     <ClInclude Include="core\shared_config.h"><Filter>core</Filter></ClInclude>
     <ClInclude Include="core\taskbar_backend.h"><Filter>core</Filter></ClInclude>
     <ClInclude Include="platform\win11\win11_backend.h"><Filter>platform\win11</Filter></ClInclude>

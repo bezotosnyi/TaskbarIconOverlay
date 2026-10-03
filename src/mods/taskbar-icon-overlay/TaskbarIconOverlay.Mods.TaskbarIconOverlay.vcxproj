@@ -15,6 +15,7 @@
     <ClCompile Include="core\app_connection.cpp" />
     <ClCompile Include="core\icon_catalog.cpp" />
     <ClCompile Include="core\overlay_settings.cpp" />
+    <ClCompile Include="core\overlay_configuration.cpp" />
     <ClCompile Include="platform\win11\win11_visual_tree.cpp" />
     <ClCompile Include="platform\win11\win11_icon_cache.cpp" />
     <ClCompile Include="platform\win10\win10_backend.cpp" />
@@ -36,6 +37,7 @@
     <ClInclude Include="core\app_connection.h" />
     <ClInclude Include="core\icon_catalog.h" />
     <ClInclude Include="core\overlay_settings.h" />
+    <ClInclude Include="core\overlay_configuration.h" />
     <ClInclude Include="platform\win11\win11_visual_tree.h" />
     <ClInclude Include="platform\win11\win11_icon_cache.h" />
     <ClInclude Include="platform\win10\win10_backend.h" />

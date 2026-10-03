@@ -143,7 +143,7 @@
 	<data name="UpdateFailed" xml:space="preserve"><value>Не удалось проверить обновления. Попробуйте позже.</value></data>
 	<data name="UpdateInstall" xml:space="preserve"><value>Загрузить и установить</value></data>
 	<data name="UpdateLater" xml:space="preserve"><value>Позже</value></data>
-	<data name="AboutDescription" xml:space="preserve"><value>Полноразмерные персональные иконки и нумерация ярлыков для панели задач Windows 11.</value></data>
+	<data name="AboutDescription" xml:space="preserve"><value>Полноразмерные персональные иконки и нумерация ярлыков для панели задач Windows 10 и Windows 11.</value></data>
 	<data name="AboutLicense" xml:space="preserve"><value>GPL-3.0 · Copyright © 2026 Dmytro Bezotosnyi</value></data>
 	<data name="AboutRepository" xml:space="preserve"><value>github.com/bezotosnyi/TaskbarIconOverlay</value></data>
 	<data name="Close" xml:space="preserve"><value>Закрыть</value></data>
@@ -167,5 +167,5 @@
 	<data name="EngineUsageError" xml:space="preserve"><value>Инжектор движка был запущен с некорректной командой.</value></data>
 	<data name="EngineUnknownError" xml:space="preserve"><value>Произошла непредвиденная ошибка движка. Проверьте файл журнала для получения дополнительной информации.</value></data>
 
-	<data name="Windows10NotSupported" xml:space="preserve"><value>Windows 10 пока не поддерживается. Поддержка находится в разработке и будет доступна в одном из следующих обновлений.</value></data>
+	<data name="Windows10NotSupported" xml:space="preserve"><value>Требуется Windows 10 или более новая версия.</value></data>
 </root>

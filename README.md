@@ -2,7 +2,7 @@
 
 > Draw full custom icon overlays on individual Windows taskbar buttons, per window, with optional Win+1…Win+0 numbering. No Windhawk installation required on the target machine.
 
-**Status: active development.** Core pipeline (injection, symbol resolution, hooking, WPF configuration UI, real-time IPC) is functional end-to-end; some edge cases are still being ironed out (see Known limitations).
+**Status: active development.** The application supports the Windows 10 and Windows 11 taskbar renderers, with a WPF configuration UI, real-time IPC, automatic updates, and an installer.
 
 > **Not to be confused with** [jlahijani/TaskbarIconOverlay](https://github.com/jlahijani/TaskbarIconOverlay), an unrelated project with the same name. That project uses the public `ITaskbarList3::SetOverlayIcon` Win32 API, which draws a small 16×16 corner badge and can't fully replace a taskbar button's icon. This project draws a full-size overlay instead – see [Why not the public overlay-icon API](#why-not-the-public-overlay-icon-api).
 
@@ -19,7 +19,8 @@ It ships as a WPF tray application: a splash screen confirms the native engine i
 ## Compatibility
 
 - **Windows 11** — supported
-- **Windows 10** — support is in development
+- **Windows 10 22H2 (build 19045.x)** — supported and tested
+- Other Windows 10 builds may work, but have not yet been verified.
 
 ## Why not the public overlay-icon API
 
@@ -51,9 +52,18 @@ TaskbarIconOverlay.App (WPF)          explorer.exe
 - Toggling ON/OFF and changing images doesn't require re-injecting or restarting `explorer.exe` – a shared memory-mapped config and named events propagate live updates to the running mod.
 - On disable/exit, hooks are cleanly removed before the engine unloads.
 
+## Install and update
+
+1. Download `TaskbarIconOverlay-Setup-x64.exe` from the [latest release](https://github.com/bezotosnyi/TaskbarIconOverlay/releases/latest).
+2. Run the installer. It installs the app, starts it, and can optionally add desktop and Start menu shortcuts.
+3. Use the tray icon to open the configuration window and assign images to taskbar buttons.
+
+The release page also includes a portable ZIP. Both packages include SHA-256 checksum files. The installed app can check GitHub Releases automatically when **Check for updates automatically** is enabled in **Settings**. Use **Help > Check for updates** to check manually.
+
 ## Requirements
 
-- Windows 11, 64-bit
+- 64-bit Windows 10 22H2 (build 19045.x) or Windows 11
+- Administrator approval when the installer requests it; it installs the application under `Program Files`.
 - To build: Visual Studio 2022 or later (Desktop development with C++ workload,
   plus .NET desktop development for the WPF app), [vcpkg](https://vcpkg.io/)
   in manifest mode
@@ -81,7 +91,7 @@ src/
 ├── injector/             CLI injector
 ├── mods/
 │   ├── shared/           Common mod code and API
-    ├── wrapper/          Windhawk API compatibility layer
+│   ├── wrapper/          Windhawk API compatibility layer
 │   ├── taskbar-grouping/ Third-party taskbar grouping mod
 │   └── taskbar-icon-overlay/
 │                         Project's taskbar icon overlay mod
@@ -97,12 +107,10 @@ scripts/                  Build and deployment scripts
 
 ## Known limitations
 
-- Releases include both a portable ZIP and an x64 Inno Setup installer. The app checks GitHub Releases for updates when enabled in **Settings**; **Help > Check for updates** performs a manual check.
-- Real-time config propagation from the WPF app to the native mod (over a memory-mapped file) is functional but still being hardened against edge cases.
-- Hooks into Explorer's internal taskbar rendering; expect breakage on some future Windows updates until symbols/hooks are updated accordingly.
+- The app hooks Explorer's internal taskbar rendering. A future Windows update can require changes to symbol resolution or the render hooks.
+- Windows 10 support has been tested on 22H2 (19045.x) only; feedback from other Windows 10 builds is especially useful.
 - `redist/` bundles renamed Microsoft DIA/SymSrv binaries for symbol resolution - their redistribution terms haven't been independently verified yet.
-- After reordering taskbar items, numbering might be incorrect. This self-corrects in the next render.
-- After initially enabling or updating settings: numbers don't appear until first taskbar interaction (like hovering).
+- On Windows 10, overlays rely on Explorer's individual taskbar buttons. The bundled `taskbar-grouping` mod provides the required ungrouped-button behavior.
 
 ## Acknowledgements
 

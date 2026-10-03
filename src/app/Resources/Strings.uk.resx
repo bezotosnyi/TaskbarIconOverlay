@@ -143,7 +143,7 @@
 	<data name="UpdateFailed" xml:space="preserve"><value>Не вдалося перевірити оновлення. Спробуйте пізніше.</value></data>
 	<data name="UpdateInstall" xml:space="preserve"><value>Завантажити й установити</value></data>
 	<data name="UpdateLater" xml:space="preserve"><value>Пізніше</value></data>
-	<data name="AboutDescription" xml:space="preserve"><value>Повнорозмірні персональні іконки та нумерація ярликів для панелі задач Windows 11.</value></data>
+	<data name="AboutDescription" xml:space="preserve"><value>Повнорозмірні персональні іконки й нумерація ярликів для панелі задач Windows 10 та Windows 11.</value></data>
 	<data name="AboutLicense" xml:space="preserve"><value>GPL-3.0 · Copyright © 2026 Dmytro Bezotosnyi</value></data>
 	<data name="AboutRepository" xml:space="preserve"><value>github.com/bezotosnyi/TaskbarIconOverlay</value></data>
 	<data name="Close" xml:space="preserve"><value>Закрити</value></data>
@@ -167,5 +167,5 @@
 	<data name="EngineUsageError" xml:space="preserve"><value>Інжектор рушія було запущено з некоректною командою.</value></data>
 	<data name="EngineUnknownError" xml:space="preserve"><value>Виникла непередбачена помилка рушія. Перевірте файл журналу для отримання додаткової інформації.</value></data>
 
-	<data name="Windows10NotSupported" xml:space="preserve"><value>Windows 10 наразі не підтримується. Підтримка зараз у розробці та буде доступна в одному з наступних оновлень.</value></data>
+	<data name="Windows10NotSupported" xml:space="preserve"><value>Потрібна Windows 10 або новіша версія.</value></data>
 </root>

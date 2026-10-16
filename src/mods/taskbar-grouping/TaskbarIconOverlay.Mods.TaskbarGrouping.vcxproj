@@ -76,7 +76,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;TASKBARICONOVERLAYMODSTASKBARGROUPING_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions);WH_MOD;WH_MOD_ID=L"taskbar-grouping";WH_MOD_VERSION=L"1.3.10"</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;TASKBARICONOVERLAYMODSTASKBARGROUPING_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions);WH_MOD;WH_MOD_ID=L"taskbar-grouping";WH_MOD_VERSION=L"1.3.11"</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
@@ -110,7 +110,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;TASKBARICONOVERLAYMODSTASKBARGROUPING_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions);WH_MOD;WH_MOD_ID=L"taskbar-grouping";WH_MOD_VERSION=L"1.3.10"</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;TASKBARICONOVERLAYMODSTASKBARGROUPING_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions);WH_MOD;WH_MOD_ID=L"taskbar-grouping";WH_MOD_VERSION=L"1.3.11"</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
